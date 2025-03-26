@@ -1,0 +1,30 @@
+﻿@* @{
+    ViewData["Title"] = "Home Page";
+}
+
+@model List<AssetDto>
+
+<div class="search-container">
+    <input type="text" placeholder="Search assets..." class="search-box" />
+</div>
+
+<div class="assets-grid">
+    @foreach (var asset in Model)
+    {
+        <div class="asset-card">
+            <img src="/uploads/@asset.AssetImage" alt="@asset.Name" class="asset-image" />
+            <h3>@asset.Name</h3>
+            <p>@asset.Description</p>
+            <div class="tags">
+                @foreach (var tag in asset.Tags)
+                {
+                    <span class="tag">@tag</span>
+                }
+            </div>
+            <div class="author">
+                <img src="/uploads/@asset.AuthorImage" alt="@asset.AuthorName" class="author-image" />
+                <span>@asset.AuthorName</span>
+            </div>
+        </div>
+    }
+</div> *@
