@@ -1,8 +1,13 @@
-﻿namespace Marketplace_3d_Assets.DataAccess.Entities
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Marketplace_3d_Assets.DataAccess.Entities
 {
+    [Table("asset_status")]
     public class AssetStatusEntity
     {
-        public int StatusId { get; set; }
+        [Key]
+        public int Status_Id { get; set; }
         public string Name { get; set; }
     }
 }

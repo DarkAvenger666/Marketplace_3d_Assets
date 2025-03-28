@@ -1,10 +1,15 @@
-﻿namespace Marketplace_3d_Assets.DataAccess.Entities
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Marketplace_3d_Assets.DataAccess.Entities
 {
+    [Table("asset_file")]
     public class AssetFileEntity
     {
-        public Guid AssetFileId { get; set; }
-        public Guid AssetId { get; set; }
-        public int FileTypeId { get; set; }
-        public string FileName { get; set; }
+        [Key]
+        public Guid Asset_File_Id { get; set; }
+        public Guid Asset_Id { get; set; }
+        public int File_Type_Id { get; set; }
+        public string File_Name { get; set; }
     }
 }

@@ -1,9 +1,14 @@
+using Marketplace_3d_Assets.BusinessLogic.Interfaces;
+using Marketplace_3d_Assets.BusinessLogic.Services;
+using Marketplace_3d_Assets.DataAccess.Interfaces;
+using Marketplace_3d_Assets.DataAccess.Repositories;
 using Marketplace_3d_Assets.Data;
 using Marketplace_3d_Assets.DataAccess.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using MySql.Data.MySqlClient;
+/*using MySql.Data.MySqlClient;*/
 using System.Text;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Marketplace_3d_Assets
 {
@@ -14,10 +19,23 @@ namespace Marketplace_3d_Assets
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("MySQLConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            var connectionString = builder.Configuration.GetConnectionString("MySQLConnection") 
+                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            var dbServerVersion = new MySqlServerVersion(new Version(8, 0, 36));
             builder.Services.AddDbContext<ApplicationContext>(options =>
-                options.UseMySQL(connectionString));
+                options.UseMySql(connectionString, dbServerVersion));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+            builder.Services.AddTransient<IAssetRepository, AssetRepository>();
+            builder.Services.AddTransient<IModerationRepository, ModerationRepository>();
+            builder.Services.AddTransient<IFileService, FileService>();
+            builder.Services.AddTransient<ITagService, TagService>();
+            builder.Services.AddTransient<IAssetTypeService, AssetTypeService>();
+            builder.Services.AddTransient<IAssetFileService, AssetFileService>();
+            builder.Services.AddTransient<IAssetImageService, AssetImageService>();
+            builder.Services.AddTransient<IAssetTagService, AssetTagService>();
+            builder.Services.AddTransient<IModerationService, ModerationService>();
+            builder.Services.AddTransient<IAssetService, AssetService>();
 
             /*builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();*/
@@ -25,6 +43,13 @@ namespace Marketplace_3d_Assets
             /*builder.Services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();*/
+
+            builder.Services.AddAuthentication("MyCookieAuth")
+                .AddCookie("MyCookieAuth", options =>
+                {
+                    options.LoginPath = "/Account/Login";
+                    options.AccessDeniedPath = "/Home/AccessDenied";
+                });
 
             builder.Services.AddControllers()
                 .AddApplicationPart(typeof(Marketplace_3d_Assets.PresentationLayer.Controllers.AssemblyMarker).Assembly);
@@ -37,25 +62,11 @@ namespace Marketplace_3d_Assets
                     });
 
             var app = builder.Build();
-            /*using (MySqlConnection conn = new MySqlConnection(connectionString))
-            {
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SELECT * FROM asset", conn);
-                using (MySqlDataReader reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        Console.WriteLine(reader.GetGuid("id"));
-                        //reader.GetTime
-                        //reader.Get
-                    }
-                }
-            }*/
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.UseMigrationsEndPoint();
+                /*app.UseMigrationsEndPoint();*/
             }
             else
             {
@@ -69,26 +80,13 @@ namespace Marketplace_3d_Assets
 
             app.UseRouting();
 
-            /*app.UseAuthorization();*/
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             //app.MapRazorPages();
-
-            /*app.Run(async (context) =>
-            {
-                if (context.Request.Cookies.ContainsKey("name"))
-                {
-                    string? name = context.Request.Cookies["name"];
-                    await context.Response.WriteAsync($"Hello {name}!");
-                }
-                else
-                {
-                    context.Response.Cookies.Append("name", "Tom");
-                    await context.Response.WriteAsync("Hello World!");
-                }
-            });*/
 
             app.Run();
         }

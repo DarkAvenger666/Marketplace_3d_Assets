@@ -1,9 +1,12 @@
-﻿namespace Marketplace_3d_Assets.DataAccess.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Marketplace_3d_Assets.DataAccess.Entities
 {
+    [Table("network_link")]
     public class NetworkLinkEntity
     {
-        public Guid ProfileId { get; set; }
-        public int NetworkNameId { get; set; }
-        public string ProfileLink { get; set; }
+        public Guid Profile_Id { get; set; }
+        public int Network_Name_Id { get; set; }
+        public string Profile_Link { get; set; }
     }
 }

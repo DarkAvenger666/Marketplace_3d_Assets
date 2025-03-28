@@ -1,8 +1,12 @@
-﻿namespace Marketplace_3d_Assets.DataAccess.Entities
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Marketplace_3d_Assets.DataAccess.Entities
 {
+    [Table("asset_tag")]
     public class AssetTagEntity
     {
-        public Guid AssetId { get; set; }
-        public int TagId { get; set; }
+        public Guid Asset_Id { get; set; }
+        public int Tag_Id { get; set; }
     }
 }

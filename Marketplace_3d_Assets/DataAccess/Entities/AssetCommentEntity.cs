@@ -1,13 +1,18 @@
-﻿namespace Marketplace_3d_Assets.DataAccess.Entities
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Marketplace_3d_Assets.DataAccess.Entities
 {
+    [Table("asset_comment")]
     public class AssetCommentEntity
     {
-        public Guid AssetCommentId { get; set; }
-        public Guid AssetId { get; set; }
+        [Key]
+        public Guid Asset_Comment_Id { get; set; }
+        public Guid Asset_Id { get; set; }
         //public AssetEntity? Asset { get; set; }
-        public Guid ProfileId { get; set; }
+        public Guid Profile_Id { get; set; }
         //public UserProfileEntity? Profile { get; set; }
-        public string CommentText { get; set; }
-        public DateTime Publicationdate { get; set; }
+        public string Comment_Text { get; set; }
+        public DateTime Publication_Date { get; set; }
     }
 }

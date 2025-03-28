@@ -1,8 +1,11 @@
-﻿namespace Marketplace_3d_Assets.DataAccess.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Marketplace_3d_Assets.DataAccess.Entities
 {
+    [Table("subscription")]
     public class SubscriptionEntity
     {
-        public Guid FromWhomProfileId { get; set; }
-        public Guid ToWhomProfileId { get; set; }
+        public Guid From_Whom_Profile_Id { get; set; }
+        public Guid To_Whom_Profile_Id { get; set; }
     }
 }

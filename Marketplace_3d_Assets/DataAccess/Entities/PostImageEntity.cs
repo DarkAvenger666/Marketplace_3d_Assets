@@ -1,9 +1,14 @@
-﻿namespace Marketplace_3d_Assets.DataAccess.Entities
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Marketplace_3d_Assets.DataAccess.Entities
 {
+    [Table("post_image")]
     public class PostImageEntity
     {
-        public Guid PostImageId { get; set; }
-        public Guid PostId { get; set; }
+        [Key]
+        public Guid Post_Image_Id { get; set; }
+        public Guid Post_Id { get; set; }
         public string Name { get; set; }
     }
 }

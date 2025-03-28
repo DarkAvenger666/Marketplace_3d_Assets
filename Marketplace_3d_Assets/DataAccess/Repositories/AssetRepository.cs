@@ -26,15 +26,15 @@ namespace Marketplace_3d_Assets.DataAccess.Repositories
 
         public async Task AddAsync(AssetEntity asset)
         {
-            asset.UploadDate = DateTime.Now;
-            asset.ModifiedDate = DateTime.Now;
+            asset.Upload_Date = DateTime.Now;
+            asset.Modified_Date = DateTime.Now;
             await _context.Assets.AddAsync(asset);
             await _context.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(AssetEntity asset)
         {
-            asset.ModifiedDate = DateTime.Now;
+            asset.Modified_Date = DateTime.Now;
             _context.Assets.Update(asset);
             await _context.SaveChangesAsync();
         }

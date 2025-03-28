@@ -1,16 +1,21 @@
-﻿namespace Marketplace_3d_Assets.DataAccess.Entities
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Marketplace_3d_Assets.DataAccess.Entities
 {
+    [Table("asset_bundle")]
     public class AssetBundleEntity
     {
-        public Guid AssetBundleId { get; set; }
-        public Guid AssetId { get; set; }
+        [Key]
+        public Guid Asset_Bundle_Id { get; set; }
+        public Guid Asset_Id { get; set; }
         //public AssetEntity? Asset { get; set; }
-        public Guid ProfileId { get; set; }
+        public Guid Profile_Id { get; set; }
         //public UserProfileEntity? Profile { get; set; }
         public string Title { get; set; }
-        public string AssetBundleDescription { get; set; }
-        public DateTime CreationDate { get; set; }
-        public DateTime ModifiedDate { get; set; }
-        public int DiscountPercaentage { get; set; }
+        public string Asset_Bundle_Description { get; set; }
+        public DateTime Creation_Date { get; set; }
+        public DateTime Modified_Date { get; set; }
+        public int Discount_Percaentage { get; set; }
     }
 }

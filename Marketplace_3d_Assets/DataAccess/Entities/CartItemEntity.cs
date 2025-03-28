@@ -1,10 +1,15 @@
-﻿namespace Marketplace_3d_Assets.DataAccess.Entities
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Marketplace_3d_Assets.DataAccess.Entities
 {
+    [Table("cart_item")]
     public class CartItemEntity
     {
-        public Guid CartItemId { get; set; }
-        public Guid UserId { get; set; }
-        public Guid AssetId { get; set; }
-        public Guid AssetBundleId { get; set; }
+        [Key]
+        public Guid Cart_Item_Id { get; set; }
+        public Guid User_Id { get; set; }
+        public Guid Asset_Id { get; set; }
+        public Guid Asset_Bundle_Id { get; set; }
     }
 }

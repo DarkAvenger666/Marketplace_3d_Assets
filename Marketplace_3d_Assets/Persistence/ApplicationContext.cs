@@ -1,5 +1,4 @@
-﻿using Azure;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Marketplace_3d_Assets.DataAccess.Entities;
 
 namespace Marketplace_3d_Assets.Data
@@ -31,11 +30,22 @@ namespace Marketplace_3d_Assets.Data
         public ApplicationContext(DbContextOptions<ApplicationContext> options) 
             : base(options)
         {
-            Database.EnsureCreated();
+            /*Database.EnsureCreated();*/
         }
-       /* protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            optionsBuilder.UseMySQL();
-        }*/
+            modelBuilder.Entity<NetworkLinkEntity>()
+                .HasKey(e => new { e.Profile_Id, e.Network_Name_Id });
+            modelBuilder.Entity<PostTagEntity>()
+                .HasKey(e => new { e.Post_Id, e.Tag_Id});
+            modelBuilder.Entity<AssetTagEntity>()
+                .HasKey(e => new { e.Asset_Id, e.Tag_Id });
+            modelBuilder.Entity<SubscriptionEntity>()
+                .HasKey(e => new { e.From_Whom_Profile_Id, e.To_Whom_Profile_Id });
+        }
+        /* protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+         {
+             optionsBuilder.UseMySQL();
+         }*/
     }
 }

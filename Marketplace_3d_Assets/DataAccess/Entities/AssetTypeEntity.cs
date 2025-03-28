@@ -1,8 +1,13 @@
-﻿namespace Marketplace_3d_Assets.DataAccess.Entities
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Marketplace_3d_Assets.DataAccess.Entities
 {
+    [Table("asset_type")]
     public class AssetTypeEntity
     {
-        public int TypeId { get; set; }
+        [Key]
+        public int Type_Id { get; set; }
         public string Name { get; set; }
     }
 }

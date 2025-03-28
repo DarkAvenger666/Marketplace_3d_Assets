@@ -1,14 +1,19 @@
-﻿namespace Marketplace_3d_Assets.DataAccess.Entities
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Marketplace_3d_Assets.DataAccess.Entities
 {
+    [Table("post")]
     public class PostEntity
     {
-        public Guid PostId { get; set; }
-        public DateTime PublicationDate { get; set; }
-        public DateTime ModifiedDate { get; set; }
+        [Key]
+        public Guid Post_Id { get; set; }
+        public DateTime Publication_Date { get; set; }
+        public DateTime Modified_Date { get; set; }
         public string Title { get; set; }
-        public string PostText { get; set; }
-        public Guid ProfileId { get; set; }
-        public int CountOfViews { get; set; }
-        public int CountOfLikes { get; set; }
+        public string Post_Text { get; set; }
+        public Guid Profile_Id { get; set; }
+        public int Count_Of_Views { get; set; }
+        public int Count_Of_Likes { get; set; }
     }
 }

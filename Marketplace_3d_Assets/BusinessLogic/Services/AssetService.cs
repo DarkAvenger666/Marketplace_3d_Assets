@@ -28,19 +28,19 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
 
         public async Task<AssetEntity?> GetByIdAsync(Guid id) => await _repository.GetByIdAsync(id);
 
-        public async Task SaveAssetToDarft(AssetDTO dtoModel)
+        public async Task<Guid> SaveAssetToDarft(AssetDTO dtoModel)
         {
             Guid assetId = Guid.NewGuid();
             var model = new AssetEntity()
             {
-                AssetId = assetId,
+                Asset_Id = assetId,
                 Title = dtoModel.Title,
-                TypeId = dtoModel.TypeId,
-                StatusId = 1,      //SavedInDraft Type
-                CountOfCopiesSold = 0,
-                CountOfLikes = 0,
-                CountOfViews = 0,
-                AssetDescription = dtoModel.AssetDescription,
+                Type_Id = dtoModel.TypeId,
+                Status_Id = 1,      //SavedInDraft Type
+                Count_Of_Copies_Sold = 0,
+                Count_Of_Likes = 0,
+                Count_Of_Views = 0,
+                Asset_Description = dtoModel.AssetDescription,
                 Price = dtoModel.Price,
                 /*ProfileId ,*/
             };
@@ -58,17 +58,18 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
             {
                 await _assetTagService.AttachTagToAsset(tag, assetId);
             }
+            return assetId;
         }
 
         public async Task SendAssetToModeration(Guid assetId)
         {
             var asset = await _repository.GetByIdAsync(assetId);
             if (asset == null) throw new Exception("Ассета с таким id не существует");
-            switch(asset.StatusId)
+            switch(asset.Status_Id)
             {
                 case 1:
                     await _moderationService.SendAssetToModeration(assetId);
-                    asset.StatusId = 2;
+                    asset.Status_Id = 2;
                     await _repository.UpdateAsync(asset);
                     break;
                 case 2:

@@ -27,11 +27,11 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
                 .FirstOrDefaultAsync();
             }
 
-            return tag.TagId;
+            return tag.Tag_Id;
         }
         public async Task<bool> DeleteTag(int tagId)
         {
-            var tag = await _dbContext.Tags.FirstOrDefaultAsync(t => t.TagId == tagId);
+            var tag = await _dbContext.Tags.FirstOrDefaultAsync(t => t.Tag_Id == tagId);
             if (tag != null)
             {
                 _dbContext.Tags.Remove(tag);

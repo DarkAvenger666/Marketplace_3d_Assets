@@ -21,10 +21,10 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
 
             var assetFile = new AssetFileEntity
             {
-                AssetFileId = Guid.NewGuid(),
-                AssetId = assetId,
-                FileTypeId = await GetOrCreateAssetFileType(Path.GetExtension(fileName)),
-                FileName = fileName
+                Asset_File_Id = Guid.NewGuid(),
+                Asset_Id = assetId,
+                File_Type_Id = await GetOrCreateAssetFileType(Path.GetExtension(fileName)),
+                File_Name = fileName
             };
             _dbContext.AssetFiles.Add(assetFile);
             await _dbContext.SaveChangesAsync();
@@ -44,14 +44,14 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
                 .FirstOrDefaultAsync();
             }
 
-            return assetFileType.FileTypeId;
+            return assetFileType.File_Type_Id;
         }
         public async Task<bool> DeleteAssetFileAsync(Guid id)
         {
-            var assetFile = await _dbContext.AssetFiles.FirstOrDefaultAsync(f => f.AssetFileId == id);
+            var assetFile = await _dbContext.AssetFiles.FirstOrDefaultAsync(f => f.Asset_File_Id == id);
             if (assetFile != null)
             {
-                string filePath = _fileService.GetFilePath("assetFiles", assetFile.FileName);
+                string filePath = _fileService.GetFilePath("assetFiles", assetFile.File_Name);
                 _dbContext.AssetFiles.Remove(assetFile);
                 await _dbContext.SaveChangesAsync();
 
@@ -63,10 +63,10 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
         }
         public async Task<string> GetAssetFilePath(Guid id)
         {
-            var assetFile = await _dbContext.AssetFiles.FirstOrDefaultAsync(f => f.AssetFileId == id);
+            var assetFile = await _dbContext.AssetFiles.FirstOrDefaultAsync(f => f.Asset_File_Id == id);
             if (assetFile != null)
             {
-                return _fileService.GetFilePath("assetFiles", assetFile.FileName);
+                return _fileService.GetFilePath("assetFiles", assetFile.File_Name);
             }
             throw new Exception("Файла с таким id не существует");
         }

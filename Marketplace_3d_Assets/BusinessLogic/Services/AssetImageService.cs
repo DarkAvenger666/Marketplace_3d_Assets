@@ -21,8 +21,8 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
 
             var assetImage = new AssetImageEntity
             {
-                AssetImageId = Guid.NewGuid(),
-                AssetId = assetId,
+                Asset_Image_Id = Guid.NewGuid(),
+                Asset_Id = assetId,
                 Name = fileName
             };
             _dbContext.AssetImages.Add(assetImage);
@@ -30,7 +30,7 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
         }
         public async Task<bool> DeleteAssetImageAsync(Guid id)
         {
-            var assetImage = await _dbContext.AssetImages.FirstOrDefaultAsync(i => i.AssetImageId == id);
+            var assetImage = await _dbContext.AssetImages.FirstOrDefaultAsync(i => i.Asset_Image_Id == id);
             if (assetImage != null)
             {
                 string filePath = _fileService.GetFilePath(Path.Combine("images", "assetImages"), assetImage.Name);
@@ -45,7 +45,7 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
         }
         public async Task<string> GetAssetImagePath(Guid id)
         {
-            var assetImage = await _dbContext.AssetImages.FirstOrDefaultAsync(i => i.AssetImageId == id);
+            var assetImage = await _dbContext.AssetImages.FirstOrDefaultAsync(i => i.Asset_Image_Id == id);
             if (assetImage != null)
             {
                 return _fileService.GetFilePath(Path.Combine("images", "assetImages"), assetImage.Name);

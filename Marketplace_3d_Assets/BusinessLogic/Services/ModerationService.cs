@@ -1,4 +1,5 @@
-﻿using Marketplace_3d_Assets.Data;
+﻿using Marketplace_3d_Assets.BusinessLogic.Interfaces;
+using Marketplace_3d_Assets.Data;
 using Marketplace_3d_Assets.DataAccess.Entities;
 using Marketplace_3d_Assets.DataAccess.Interfaces;
 using Marketplace_3d_Assets.DataAccess.Repositories;
@@ -8,7 +9,7 @@ using NuGet.Protocol.Core.Types;
 
 namespace Marketplace_3d_Assets.BusinessLogic.Services
 {
-    public class ModerationService
+    public class ModerationService : IModerationService
     {
         private readonly ApplicationContext _dbContext;
         private readonly IModerationRepository _repository;
@@ -19,15 +20,15 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
         }
         public async Task SendAssetToModeration(Guid assetId)
         {
-            var asset = _dbContext.Assets.FirstOrDefaultAsync(a => a.AssetId == assetId);
+            var asset = _dbContext.Assets.FirstOrDefaultAsync(a => a.Asset_Id == assetId);
             if (asset == null) throw new Exception("Нет ассета с таким id");
             var moderationRequest = new ModerationRequestEntity()
             {
-                RequestId = Guid.NewGuid(),
-                AssetId = assetId,
-                IsComplited = false,
-                SendingDate = DateTime.Now,
-                UserId = await _repository.GetUserWithMinModerationRequestsAsync()
+                Request_Id = Guid.NewGuid(),
+                Asset_Id = assetId,
+                Is_Complited = false,
+                Sending_Date = DateTime.Now,
+                User_Id = await _repository.GetUserWithMinModerationRequestsAsync()
             };
             await _dbContext.ModerationRequests.AddAsync(moderationRequest);
             await _dbContext.SaveChangesAsync();

@@ -1,20 +1,58 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model Marketplace_3d_Assets.BusinessLogic.Models_DTOs_.AssetDTO
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>METANIT.COM</title>
+    <script>
+        function addTag() {
+            const container = document.getElementById('tags-container');
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.name = 'Tags';
+            container.appendChild(input);
+        }
+    </script>
 </head>
 <body>
     <h2>Выберите файл для загрузки</h2>
-    <form action="upload" method="post" enctype="multipart/form-data">
-        <input type="file" id="file" name="file" multiple /><br>
-        <input type="submit" value="Загрузить" />
+    <form asp-action="SaveToDraft" method="post" enctype="multipart/form-data">
+        <p>
+            <label asp-for="Title"></label>
+            <input type="text" asp-for="Title" />
+        </p>
+        <p>
+            <label asp-for="AssetDescription"></label>
+            <textarea asp-for="AssetDescription"></textarea>
+        </p>
+        <p>
+            <label asp-for="TypeId"></label>
+            <select asp-for="TypeId" asp-items="ViewBag.AssetTypes">
+                <option value="">-- Выберите тип --</option>
+            </select>
+        </p>
+
+
+        <p>
+            <label asp-for="Price"></label>
+            <input type="text" asp-for="Price" />
+        </p>
+        <p>
+            <label asp-for="Images"></label>
+            <input type="file" id="Images" name="Images" multiple /><br>
+        </p>
+        <p>
+            <label asp-for="Files"></label>
+            <input type="file" id="Files" name="Files" multiple /><br>
+        </p>
+        <p id="tags-container">
+            <input type="text" name="Tags" />
+        </p>
+        <button type="button" onclick="addTag()">Добавить тег</button>
+
+        <input type="submit" value="Сохранить в черновике" />
+        <input type="submit" value="Отправить на модерацию" />
     </form>
 </body>
 </html>

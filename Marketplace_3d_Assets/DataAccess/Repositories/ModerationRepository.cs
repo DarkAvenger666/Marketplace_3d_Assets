@@ -16,11 +16,11 @@ namespace Marketplace_3d_Assets.DataAccess.Repositories
         public async Task<Guid> GetUserWithMinModerationRequestsAsync()
         {
             var userRequestCounts = await _context.Users
-                .Where(u => u.RoleId == 2)
+                .Where(u => u.Role_Id == 2)
                 .GroupJoin(
                     _context.ModerationRequests,
-                    user => user.UserId,
-                    request => request.UserId,
+                    user => user.User_Id,
+                    request => request.User_Id,
                     (user, requests) => new
                     {
                         User = user,
@@ -32,7 +32,7 @@ namespace Marketplace_3d_Assets.DataAccess.Repositories
 
             if (userRequestCounts == null) throw new Exception("Произошла ошибка");
 
-            return userRequestCounts.UserId;
+            return userRequestCounts.User_Id;
         }
     }
 }

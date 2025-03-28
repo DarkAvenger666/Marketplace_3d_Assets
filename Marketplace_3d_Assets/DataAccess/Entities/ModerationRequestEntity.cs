@@ -1,13 +1,18 @@
-﻿namespace Marketplace_3d_Assets.DataAccess.Entities
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Marketplace_3d_Assets.DataAccess.Entities
 {
+    [Table("moderation_request")]
     public class ModerationRequestEntity
     {
-        public Guid RequestId { get; set; }
-        public DateTime SendingDate { get; set; }
-        public DateTime CompletionDate { get; set; }
-        public Guid AssetId { get; set; }
-        public bool IsComplited { get; set; }
+        [Key]
+        public Guid Request_Id { get; set; }
+        public DateTime Sending_Date { get; set; }
+        public DateTime Completion_Date { get; set; }
+        public Guid Asset_Id { get; set; }
+        public bool Is_Complited { get; set; }
         public string Comment { get; set; }
-        public Guid UserId { get; set; }
+        public Guid User_Id { get; set; }
     }
 }

@@ -1,17 +1,21 @@
 ﻿using Marketplace_3d_Assets.BusinessLogic.Models_DTOs_;
 using Marketplace_3d_Assets.BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace Marketplace_3d_Assets.PresentationLayer.Controllers
 {
     public class AssetController : Controller
     {
         private readonly IAssetService _assetService;
-       /* public AssetController(IAssetService assetService) 
+        private readonly IAssetTypeService _assetTypeService;
+        public AssetController(IAssetService assetService, IAssetTypeService assetTypeService)
         {
             _assetService = assetService;
+            _assetTypeService = assetTypeService;
         }
-        [HttpGet]
+        /*[HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var models = await _assetService.GetAllAsync();
@@ -27,19 +31,22 @@ namespace Marketplace_3d_Assets.PresentationLayer.Controllers
         }*/
 
         [HttpGet]
-        public IActionResult UploadAsset()
+        public async Task<IActionResult> UploadAsset()
         {
+            var assetTypes = await _assetTypeService.GetAllAsync();
+            ViewBag.AssetTypes = new SelectList(assetTypes, "Type_Id", "Name");
             return View();
         }
 
-        /*[HttpPost]
-        public async Task<IActionResult> Create([FromBody] AssetDTO model)
+        [HttpPost]
+        public async Task<IActionResult> SaveToDraft([FromForm] AssetDTO model)
         {
-            var createdModel = await _assetService.CreateAsync(model);
-            return CreatedAtAction(nameof(GetById), new { id = createdModel.Id }, createdModel);
+            var savedDraftId = await _assetService.SaveAssetToDarft(model);
+            //return CreatedAtAction(nameof(GetById), new { id = savedModelId }, createdModel);
+            return Ok($"Ассет с id - {savedDraftId} успешно сохранён");
         }
 
-        [HttpDelete("{id}")]
+        /*[HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var success = await _assetService.DeleteAsync(id);
