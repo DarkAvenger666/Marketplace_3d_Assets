@@ -9,5 +9,6 @@ namespace Marketplace_3d_Assets.DataAccess.Entities
         [Key]
         public int Role_Id { get; set; }
         public string Name { get; set; }
+        public virtual ICollection<UserEntity> Users { get; set; } = new List<UserEntity>();
     }
 }

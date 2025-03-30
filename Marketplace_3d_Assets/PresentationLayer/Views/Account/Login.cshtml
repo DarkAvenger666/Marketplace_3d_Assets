@@ -1,39 +1,13 @@
-﻿@model LoginViewModel
+﻿@using Marketplace_3d_Assets.PresentationLayer.ViewModels
+@model LoginViewModel
 <form asp-action="Login" method="post">
     <p>
-        <label asp-for="Name"></label>
-        <input type="text" asp-for="Name" />
-    </p>
-    <p>
-        <label asp-for="User_Name"></label>
-        <input type="text" asp-for="User_Name" />
-    </p>
-    <p>
-        <label asp-for="Email"></label>
-        <input type="email" asp-for="Email" />
+        <label asp-for="Login"></label>
+        <input type="text" asp-for="Login" />
     </p>
     <p>
         <label asp-for="Password"></label>
         <input type="password" asp-for="Password" />
     </p>
-    <p>
-        <label asp-for="PhoneNumber"></label>
-        <input type="tel" asp-for="PhoneNumber" />
-    </p>
-
-
-    <p>
-        <label asp-for="Specialization"></label>
-        <input type="text" asp-for="Specialization" />
-    </p>
-    <p>
-        <label asp-for="Specialization"></label>
-        <input type="text" asp-for="Specialization" />
-    </p>
-    <p>
-        <label asp-for="AssetDescription"></label>
-        <textarea asp-for="AssetDescription"></textarea>
-    </p>
-    
-    <input type="submit" value="Зарегестрироваться" />
+    <input type="submit" value="Войти" />
 </form>

@@ -33,6 +33,14 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
             await _dbContext.ModerationRequests.AddAsync(moderationRequest);
             await _dbContext.SaveChangesAsync();
         }
+        public async Task SendSeccessModerResult(Guid moderRequestId, Guid moderUserId)
+        {
+
+        }
+        public async Task SendUnseccessModerResult(Guid moderRequestId, Guid moderUserId)
+        {
+
+        }
 
     }
 }

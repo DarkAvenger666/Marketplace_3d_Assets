@@ -3,6 +3,7 @@ using Marketplace_3d_Assets.BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Marketplace_3d_Assets.PresentationLayer.Controllers
 {
@@ -38,6 +39,8 @@ namespace Marketplace_3d_Assets.PresentationLayer.Controllers
             return View();
         }
 
+
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> SaveToDraft([FromForm] AssetDTO model)
         {

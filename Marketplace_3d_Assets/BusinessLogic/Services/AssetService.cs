@@ -2,8 +2,10 @@
 using Marketplace_3d_Assets.BusinessLogic.Models_DTOs_;
 using Marketplace_3d_Assets.DataAccess.Entities;
 using Marketplace_3d_Assets.DataAccess.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol.Core.Types;
+using System.Security.Claims;
 
 namespace Marketplace_3d_Assets.BusinessLogic.Services
 {
@@ -14,15 +16,17 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
         private readonly IAssetImageService _assetImageService;
         private readonly IAssetTagService _assetTagService;
         private readonly IModerationService _moderationService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         public AssetService(IAssetRepository assetRepository, IAssetFileService assetFileService,
                             IAssetImageService assetImageService, IAssetTagService assetTagService,
-                            IModerationService moderationService) 
+                            IModerationService moderationService, IHttpContextAccessor httpContextAccessor) 
         {
             _repository = assetRepository;
             _assetFileService = assetFileService;
             _assetImageService = assetImageService;
             _assetTagService = assetTagService;
             _moderationService = moderationService;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<IEnumerable<AssetEntity>> GetAllAsync() => await _repository.GetAllAsync();
 
@@ -31,6 +35,11 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
         public async Task<Guid> SaveAssetToDarft(AssetDTO dtoModel)
         {
             Guid assetId = Guid.NewGuid();
+
+            string test = _httpContextAccessor.HttpContext?.User.FindFirstValue("ProfileId");
+            Console.WriteLine(test);
+
+            var profileId = Guid.Parse(_httpContextAccessor.HttpContext?.User.FindFirstValue("ProfileId"));
             var model = new AssetEntity()
             {
                 Asset_Id = assetId,
@@ -42,7 +51,7 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
                 Count_Of_Views = 0,
                 Asset_Description = dtoModel.AssetDescription,
                 Price = dtoModel.Price,
-                /*ProfileId ,*/
+                Profile_Id = profileId
             };
             await _repository.AddAsync(model);
 

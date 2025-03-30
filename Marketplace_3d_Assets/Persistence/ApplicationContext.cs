@@ -42,6 +42,14 @@ namespace Marketplace_3d_Assets.Data
                 .HasKey(e => new { e.Asset_Id, e.Tag_Id });
             modelBuilder.Entity<SubscriptionEntity>()
                 .HasKey(e => new { e.From_Whom_Profile_Id, e.To_Whom_Profile_Id });
+            modelBuilder.Entity<UserEntity>()
+                .HasOne(u => u.Profile)
+                .WithOne(p => p.User)
+                .HasForeignKey<UserEntity>(u => u.Profile_Id);
+            modelBuilder.Entity<UserEntity>()
+                .HasOne(u => u.Role) 
+                .WithMany(r => r.Users)    
+                .HasForeignKey(u => u.Role_Id);
         }
         /* protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
          {

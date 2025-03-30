@@ -26,8 +26,11 @@ namespace Marketplace_3d_Assets
                 options.UseMySql(connectionString, dbServerVersion));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+            builder.Services.AddHttpContextAccessor();
+
             builder.Services.AddTransient<IAssetRepository, AssetRepository>();
             builder.Services.AddTransient<IModerationRepository, ModerationRepository>();
+            builder.Services.AddTransient<IUserProfileRepository, UserProfileRepository>();
             builder.Services.AddTransient<IFileService, FileService>();
             builder.Services.AddTransient<ITagService, TagService>();
             builder.Services.AddTransient<IAssetTypeService, AssetTypeService>();
@@ -36,6 +39,8 @@ namespace Marketplace_3d_Assets
             builder.Services.AddTransient<IAssetTagService, AssetTagService>();
             builder.Services.AddTransient<IModerationService, ModerationService>();
             builder.Services.AddTransient<IAssetService, AssetService>();
+            builder.Services.AddTransient<IAuthService, AuthService>();
+            builder.Services.AddTransient<IUserService, UserService>();
 
             /*builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();*/

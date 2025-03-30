@@ -10,12 +10,13 @@ namespace Marketplace_3d_Assets.DataAccess.Entities
         public Guid Profile_Id { get; set; }
         public string User_Name { get; set; }
         public int Subscribers_Count { get; set; }
-        public int Subscription_Count { get; set; }
+        public int Subscriptions_Count { get; set; }
         public DateTime Creation_Date { get; set; }
         public DateTime Modified_Date { get; set; }
         public string Gender { get; set; }
         public string Specialization { get; set; }
         public string City { get; set; }
         public string About { get; set; }
+        public virtual UserEntity User { get; set; }
     }
 }
