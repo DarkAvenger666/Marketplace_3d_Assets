@@ -52,5 +52,14 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
             }
             throw new Exception("Изображения с таким id не существует");
         }
+        public async Task<string> GetAssetImageRelationPath(Guid id)
+        {
+            var assetImage = await _dbContext.AssetImages.FirstOrDefaultAsync(i => i.Asset_Image_Id == id);
+            if (assetImage != null)
+            {
+                return _fileService.GetFileRelationalPath(Path.Combine("images", "assetImages"), assetImage.Name);
+            }
+            throw new Exception("Изображения с таким id не существует");
+        }
     }
 }

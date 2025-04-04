@@ -39,6 +39,9 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
         {
             return Path.Combine(_basePath, folderName, Path.GetExtension(fileName).ToLower(), fileName);
         }
-
+        public string GetFileRelationalPath(string folderName, string fileName)
+        {
+            return Path.Combine(folderName, Path.GetExtension(fileName).ToLower(), fileName);
+        }
     }
 }

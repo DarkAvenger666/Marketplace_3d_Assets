@@ -1,0 +1,30 @@
+﻿@using Marketplace_3d_Assets.PresentationLayer.ViewModels
+@model PostUploadViewModel
+
+<h2>Публикация поста</h2>
+<form asp-action="PublishPost" method="post">
+    <p>
+        <label asp-for="Title"></label>
+        <input type="text" asp-for="Title" />
+    </p>
+    <p>
+        <label asp-for="Post_Text"></label>
+        <textarea asp-for="Post_Text"></textarea>
+    </p>
+
+    <p id="tags-container">
+        <input type="text" name="Tags" />
+    </p>
+    <button type="button" onclick="addTag()">Добавить тег</button>
+
+    <input type="submit" value="Опубликовать пост" />
+</form>
+<script>
+    function addTag() {
+        const container = document.getElementById('tags-container');
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.name = 'Tags';
+        container.appendChild(input);
+    }
+</script>

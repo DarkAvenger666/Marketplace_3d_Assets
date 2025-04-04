@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Marketplace_3d_Assets.BusinessLogic.Services;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Marketplace_3d_Assets.DataAccess.Entities
@@ -14,6 +15,7 @@ namespace Marketplace_3d_Assets.DataAccess.Entities
         public string Post_Text { get; set; }
         public Guid Profile_Id { get; set; }
         public int Count_Of_Views { get; set; }
-        public int Count_Of_Likes { get; set; }
+        public UserProfileEntity Profile { get; set; }
+        public List<PostTagEntity> Post_Tags { get; set; }
     }
 }

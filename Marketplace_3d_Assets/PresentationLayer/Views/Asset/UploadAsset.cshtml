@@ -1,22 +1,5 @@
-﻿@model Marketplace_3d_Assets.BusinessLogic.Models_DTOs_.AssetDTO
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>METANIT.COM</title>
-    <script>
-        function addTag() {
-            const container = document.getElementById('tags-container');
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.name = 'Tags';
-            container.appendChild(input);
-        }
-    </script>
-</head>
-<body>
-    <h2>Выберите файл для загрузки</h2>
+﻿@model Marketplace_3d_Assets.PresentationLayer.ViewModels.AssetUploadViewModel
+<h2>Загрузка Ассета</h2>
     <form asp-action="SaveToDraft" method="post" enctype="multipart/form-data">
         <p>
             <label asp-for="Title"></label>
@@ -54,5 +37,12 @@
         <input type="submit" value="Сохранить в черновике" />
         <input type="submit" value="Отправить на модерацию" />
     </form>
-</body>
-</html>
+    <script>
+        function addTag() {
+            const container = document.getElementById('tags-container');
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.name = 'Tags';
+            container.appendChild(input);
+        }
+    </script>

@@ -1,0 +1,34 @@
+﻿@using Marketplace_3d_Assets.PresentationLayer.ViewModels
+@model List<CartItemViewModel>
+
+@{
+    float totalSum = 0; 
+}
+
+<link rel="stylesheet" href="~/css/Cart.css" />
+
+<div class="cart-container">
+    <h2>Корзина</h2>
+    <table>
+        <thead>
+            <tr><th>Товар</th><th>Цена</th><th>Кол-во</th><th>Итого</th><th></th></tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Title</td>
+                    <td>@item.Price</td>
+                    <td>@item.Quantity</td>
+                    <td>@(item.Price * item.Quantity)</td>
+                    <td><a href="@Url.Action("Remove", "Cart", new { id = item.Asset_Id })">Удалить</a></td>
+                </tr>
+                totalSum += @item.Price * @item.Quantity;
+            }
+        </tbody>
+    </table>
+    <div class="cart-total">
+        <h3>Итого: $@totalSum</h3>
+    </div>
+    <a href="@Url.Action("Checkout", "Cart")" class="btn btn-success">Оформить заказ</a>
+</div>

@@ -1,9 +1,9 @@
-﻿using Marketplace_3d_Assets.BusinessLogic.Models_DTOs_;
-using Marketplace_3d_Assets.BusinessLogic.Interfaces;
+﻿using Marketplace_3d_Assets.BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using Marketplace_3d_Assets.PresentationLayer.ViewModels;
 
 namespace Marketplace_3d_Assets.PresentationLayer.Controllers
 {
@@ -16,21 +16,8 @@ namespace Marketplace_3d_Assets.PresentationLayer.Controllers
             _assetService = assetService;
             _assetTypeService = assetTypeService;
         }
-        /*[HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            var models = await _assetService.GetAllAsync();
-            return Ok(models);
-        }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(Guid id)
-        {
-            var model = await _assetService.GetByIdAsync(id);
-            if (model == null) return NotFound();
-            return Ok(model);
-        }*/
-
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> UploadAsset()
         {
@@ -39,23 +26,31 @@ namespace Marketplace_3d_Assets.PresentationLayer.Controllers
             return View();
         }
 
-
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> SaveToDraft([FromForm] AssetDTO model)
+        public async Task<IActionResult> SaveToDraft([FromForm] AssetUploadViewModel model)
         {
             var savedDraftId = await _assetService.SaveAssetToDarft(model);
             //return CreatedAtAction(nameof(GetById), new { id = savedModelId }, createdModel);
             return Ok($"Ассет с id - {savedDraftId} успешно сохранён");
         }
 
-        /*[HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        [HttpGet]
+        public async Task<IActionResult> AssetDetails([FromRoute(Name = "id")] Guid assetId)
         {
-            var success = await _assetService.DeleteAsync(id);
-            if (!success) return NotFound();
-            return NoContent();
-        }*/
+            var assetDetails = await _assetService.GetAssetDetailsAsync(assetId);
+            return View(assetDetails);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ToggleLike(Guid assetId)
+        {
+            var userProfileId = Guid.Parse(User.FindFirst("ProfileId")?.Value);
+            var isLiked = await _assetService.ToggleLikeAsync(assetId, userProfileId);
+            var likesCount = await _assetService.GetLikesCountAsync(assetId);
+
+            return Json(new { isLiked, likesCount });
+        }
     }
     public class AssemblyMarker { }
 }

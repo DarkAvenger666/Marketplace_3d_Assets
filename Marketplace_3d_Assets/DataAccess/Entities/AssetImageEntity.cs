@@ -8,7 +8,9 @@ namespace Marketplace_3d_Assets.DataAccess.Entities
     {
         [Key]
         public Guid Asset_Image_Id {  get; set; }
+        /*[ForeignKey("Asset")]*/
         public Guid Asset_Id { get; set; }
+        public AssetEntity Asset { get; set; }
         public string Name { get; set; }
     }
 }

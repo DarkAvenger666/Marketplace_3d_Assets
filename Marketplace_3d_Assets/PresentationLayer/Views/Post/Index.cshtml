@@ -1,0 +1,14 @@
+﻿@using Marketplace_3d_Assets.PresentationLayer.ViewModels
+@model IEnumerable<PostCardViewModel>
+
+<div class="posts-container">
+    @foreach (var post in Model)
+    {
+        <div class="post-card">
+            <h2>@post.Title</h2>
+            <p class="post-meta">Автор: @post.Author_Name | Просмотров: @post.Count_Of_Views</p>
+            <p class="post-content">@post.Post_Text.Substring(0, Math.Min(200, post.Post_Text.Length))...</p>
+            <a href="@Url.Action("PostDetails", "Post", new { id = post.Id })" class="read-more">Читать далее</a>
+        </div>
+    }
+</div>

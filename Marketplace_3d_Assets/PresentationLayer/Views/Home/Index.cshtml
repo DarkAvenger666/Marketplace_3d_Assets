@@ -1,30 +1,53 @@
-﻿@* @{
-    ViewData["Title"] = "Home Page";
-}
-
-@model List<AssetDto>
+﻿@using Marketplace_3d_Assets.PresentationLayer.ViewModels
+@model List<AssetCardViewModel>
 
 <div class="search-container">
     <input type="text" placeholder="Search assets..." class="search-box" />
 </div>
-
+<link rel="stylesheet" href="~/css/Index.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <div class="assets-grid">
     @foreach (var asset in Model)
     {
-        <div class="asset-card">
-            <img src="/uploads/@asset.AssetImage" alt="@asset.Name" class="asset-image" />
-            <h3>@asset.Name</h3>
-            <p>@asset.Description</p>
-            <div class="tags">
-                @foreach (var tag in asset.Tags)
-                {
-                    <span class="tag">@tag</span>
-                }
+        <a href="@Url.Action("AssetDetails", "Asset", new {id = asset.Id})">
+            <div class="asset-card">
+            
+                <img src="@asset.Asset_Image" alt="@asset.Title" class="asset-image" />
+                <h3>@asset.Title</h3>
+                <p>@asset.Type_Name</p>
+                <p>@asset.Author_Name</p>
+                <p>@asset.Price</p>
+                <div class="asset-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-shopping-cart"></i> @asset.Count_Of_Copies_Sold
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-comments"></i> @asset.Count_Of_Comments
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-eye"></i> @asset.Count_Of_Views
+                    </div>
+                    <div class="stat-item like-container" id="like-btn" data-asset-id="@asset.Id">
+                        <i class="fas fa-heart"></i> @asset.Count_Of_Likes
+                    </div>
+                </div>
+                @* <div class="tags">
+                    @foreach (var tag in asset.Tags)
+                    {
+                        <span class="tag">@tag</span>
+                    }
+                </div> *@
             </div>
-            <div class="author">
-                <img src="/uploads/@asset.AuthorImage" alt="@asset.AuthorName" class="author-image" />
-                <span>@asset.AuthorName</span>
-            </div>
-        </div>
+        </a>
     }
-</div> *@
+</div>
+<script>
+    document.getElementById("like-btn").addEventListener("click", function () {
+        var assetId = this.getAttribute("data-asset-id");
+        fetch('/Asset/ToggleLike?assetId=' + assetId, { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("like-count").innerText = data.likesCount;
+            });
+    });
+</script>

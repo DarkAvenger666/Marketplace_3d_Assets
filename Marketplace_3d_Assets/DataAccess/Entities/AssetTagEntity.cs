@@ -8,5 +8,7 @@ namespace Marketplace_3d_Assets.DataAccess.Entities
     {
         public Guid Asset_Id { get; set; }
         public int Tag_Id { get; set; }
+        public TagEntity Tag { get; set; }
+        public AssetEntity Asset { get; set; }
     }
 }

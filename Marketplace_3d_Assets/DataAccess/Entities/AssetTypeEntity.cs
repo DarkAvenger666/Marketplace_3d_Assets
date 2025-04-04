@@ -9,5 +9,6 @@ namespace Marketplace_3d_Assets.DataAccess.Entities
         [Key]
         public int Type_Id { get; set; }
         public string Name { get; set; }
+        public List<AssetEntity> Assets { get; set; } = new List<AssetEntity>();
     }
 }

@@ -17,6 +17,12 @@ namespace Marketplace_3d_Assets.DataAccess.Entities
         public string Specialization { get; set; }
         public string City { get; set; }
         public string About { get; set; }
-        public virtual UserEntity User { get; set; }
+        public UserEntity User { get; set; }
+        public List<AssetEntity> Assets { get; set; } = new List<AssetEntity>();
+        public List<AssetCommentEntity> Asset_Comments { get; set; }
+        public List<AssetLikeEntity> Asset_Likes { get; set; }
+        public List<PostCommentEntity> Post_Comments { get; set; }
+        public List<NetworkLinkEntity> Network_Links { get; set; }
+        public List<PostEntity> Posts { get; set; }
     }
 }

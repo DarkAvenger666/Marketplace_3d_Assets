@@ -25,19 +25,20 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
         }
         public async Task<bool> LoginAsync(LoginViewModel model)
         {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == model.Login);
-            if (user == null)
-            {
-                user = await _dbContext.Users.Include(u => u.Profile).Include(u => u.Role)
-                        .FirstOrDefaultAsync(u => u.Profile.User_Name == model.Login);
-            }
+            var user = await _dbContext.Users.Include(u => u.Profile)
+                         .Include(u => u.Role)
+                         .FirstOrDefaultAsync(u => u.Email == model.Login || u.Profile.User_Name == model.Login);
+
             if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.Password_Hash))
-                return false; // Возвращаем false вместо ModelState.AddModelError
+                return false;
+
+            if (user.Profile == null || user.Role == null)
+                throw new Exception("Связанные данные не найдены!");
 
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.User_Id.ToString()),
-                new Claim("ProfileId", user.Profile.Profile_Id.ToString() ?? "0"),
+                new Claim("ProfileId", user.Profile.Profile_Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Name, user.Profile.User_Name ?? "Unknown"),
                 new Claim(ClaimTypes.Role, user.Role.Name ?? "User")

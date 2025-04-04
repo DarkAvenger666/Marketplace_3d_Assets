@@ -1,7 +1,8 @@
-﻿namespace Marketplace_3d_Assets.BusinessLogic.Models_DTOs_
+﻿namespace Marketplace_3d_Assets.PresentationLayer.ViewModels
 {
-    public class AssetDTO
+    public class AssetUploadViewModel
     {
+        public Guid AssetId { get; set; }
         public string Title { get; set; }
         public string AssetDescription { get; set; }
         public int TypeId { get; set; }

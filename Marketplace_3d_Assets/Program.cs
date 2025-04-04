@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 /*using MySql.Data.MySqlClient;*/
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 
 namespace Marketplace_3d_Assets
 {
@@ -28,19 +29,24 @@ namespace Marketplace_3d_Assets
 
             builder.Services.AddHttpContextAccessor();
 
-            builder.Services.AddTransient<IAssetRepository, AssetRepository>();
-            builder.Services.AddTransient<IModerationRepository, ModerationRepository>();
-            builder.Services.AddTransient<IUserProfileRepository, UserProfileRepository>();
-            builder.Services.AddTransient<IFileService, FileService>();
-            builder.Services.AddTransient<ITagService, TagService>();
-            builder.Services.AddTransient<IAssetTypeService, AssetTypeService>();
-            builder.Services.AddTransient<IAssetFileService, AssetFileService>();
-            builder.Services.AddTransient<IAssetImageService, AssetImageService>();
-            builder.Services.AddTransient<IAssetTagService, AssetTagService>();
-            builder.Services.AddTransient<IModerationService, ModerationService>();
-            builder.Services.AddTransient<IAssetService, AssetService>();
-            builder.Services.AddTransient<IAuthService, AuthService>();
-            builder.Services.AddTransient<IUserService, UserService>();
+            builder.Services.AddScoped<IAssetRepository, AssetRepository>();
+            builder.Services.AddScoped<IModerationRepository, ModerationRepository>();
+            builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
+            builder.Services.AddScoped<IFileService, FileService>();
+            builder.Services.AddScoped<ITagService, TagService>();
+            builder.Services.AddScoped<IAssetTypeService, AssetTypeService>();
+            builder.Services.AddScoped<IAssetFileService, AssetFileService>();
+            builder.Services.AddScoped<IAssetImageService, AssetImageService>();
+            builder.Services.AddScoped<IAssetTagService, AssetTagService>();
+            builder.Services.AddScoped<IModerationService, ModerationService>();
+            builder.Services.AddScoped<IAssetService, AssetService>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IAssetCommentService, AssetCommentService>();
+            builder.Services.AddScoped<IPostService, PostService>();
+            builder.Services.AddScoped<IPostTagService, PostTagService>();
+            builder.Services.AddScoped<ICartService, CookieCartService>();
+            builder.Services.AddScoped<ICheckoutService, CheckoutServiceStub>();
 
             /*builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();*/
@@ -82,6 +88,13 @@ namespace Marketplace_3d_Assets
             
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), 
+                    "PresentationLayer/wwwroot")),
+                RequestPath = ""
+            });
 
             app.UseRouting();
 

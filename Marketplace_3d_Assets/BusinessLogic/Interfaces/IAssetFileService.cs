@@ -6,5 +6,6 @@
         Task<int> GetOrCreateAssetFileType(string fileType);
         Task<bool> DeleteAssetFileAsync(Guid id);
         Task<string> GetAssetFilePath(Guid id);
+        Task<string> GetAssetFileRelationPath(Guid id);
     }
 }

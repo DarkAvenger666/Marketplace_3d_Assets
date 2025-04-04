@@ -7,5 +7,6 @@ namespace Marketplace_3d_Assets.BusinessLogic.Interfaces
         Task AttachTagToAsset(string tagName, Guid assetId);
         Task<bool> UnAttachTagFromAsset(int TagId, Guid assetId);
         Task<List<AssetTagEntity>> GetAssetTags(Guid assetId);
+        Task<int> GetOrCreateAssetTagId(string tagName);
     }
 }

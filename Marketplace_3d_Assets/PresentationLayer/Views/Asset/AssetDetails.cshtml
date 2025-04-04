@@ -1,0 +1,183 @@
+﻿@using Marketplace_3d_Assets.PresentationLayer.ViewModels
+@model AssetDetailsViewModel
+
+<link rel="stylesheet" href="~/css/AssetDetails.css"/>
+
+<div class="asset-details-container">
+    <h1>@Model.Title</h1>
+
+    <div class="asset-images">
+        @foreach (var image in Model.Images)
+        {
+            <img src="~/@image" alt="Asset Image" class="asset-image" />
+        }
+    </div>
+
+    <div class="asset-info">
+        <p><strong>Автор:</strong> @Model.Author_Name</p>
+        <p><strong>Тип:</strong> @Model.Type_Name</p>
+        <p><strong>Дата публикации:</strong> @Model.Upload_Date.ToString("yyyy-MM-dd")</p>
+        <p><strong>Дата изменения:</strong> @Model.Modified_Date.ToString("yyyy-MM-dd")</p>
+        <p><strong>Цена:</strong> $@Model.Price</p>
+        <p><strong>Описание:</strong> @Model.Description</p>
+    </div>
+
+    <div class="asset-tags">
+        <strong>Теги:</strong>
+        @foreach (var tag in Model.Tags)
+        {
+            <span class="tag">@tag</span>
+        }
+    </div>
+
+    <div class="asset-stats">
+        <p><strong>Продано копий:</strong> @Model.Count_Of_Copies_Sold</p>
+        <p><strong>Количество просмотров:</strong> @Model.Count_Of_Views</p>
+        <div class="like-container">
+            <button id="like-btn" data-asset-id="@Model.Id">
+                ❤️ <span id="like-count">@Model.Count_Of_Likes</span>
+            </button>
+        </div>
+        <!-- <p><strong>Количество лайков:</strong> @Model.Count_Of_Likes</p> -->
+    </div>
+
+    <div class="add-to-cart-container">
+        <button class="add-to-cart-btn" onclick="addToCart('@Model.Id', '@Model.Title', '@Model.Price')">Добавить в корзину</button>
+    </div>
+
+    <h2>Комментарии <span id="comment-count">(@Model.Count_Of_Comments)</span></h2>
+
+    <!-- Форма добавления комментария -->
+    <div class="add-comment">
+        <textarea id="comment-content" placeholder="Напишите комментарий..."></textarea>
+        <button id="submit-comment">Добавить</button>
+    </div>
+
+    <div id="comments-container">
+        <p>Загрузка комментариев...</p>
+    </div>
+
+    <button id="load-more" style="display:none;">Показать ещё</button>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let assetId = "@Model.Id";
+        let page = 1;
+        let pageSize = 10;
+        let totalComments = 0;
+
+        function loadComments() {
+            fetch(`/AssetComment/GetByAssetPaged/${assetId}?page=${page}&pageSize=${pageSize}`)
+                .then(response => response.json())
+                .then(data => {
+                    let commentsContainer = document.getElementById("comments-container");
+
+                    if (page === 1) {
+                        commentsContainer.innerHTML = ""; // Очищаем только при первой загрузке
+                        totalComments = data.totalCount;
+                    }
+
+                    data.comments.forEach(comment => {
+                        let commentHtml = `
+                            <div class="comment">
+                                <strong>${comment.user_Name}</strong>
+                                <p>${comment.comment_Text}</p>
+                                <span class="comment-date">${comment.publication_Date}</span>
+                            </div>
+                        `;
+                        commentsContainer.innerHTML += commentHtml;
+                    });
+
+                    document.getElementById("comment-count").innerText = `(${totalComments})`;
+
+                    if (page * pageSize >= totalComments) {
+                        document.getElementById("load-more").style.display = "none";
+                    } else {
+                        document.getElementById("load-more").style.display = "block";
+                    }
+                })
+                .catch(error => console.error("Ошибка при загрузке комментариев:", error));
+        }
+
+        document.getElementById("load-more").addEventListener("click", function () {
+            page++;
+            loadComments();
+        });
+
+        loadComments(); // Загружаем первую страницу
+    
+    // Обработчик для отправки нового комментария
+    document.getElementById("submit-comment").addEventListener("click", function () {
+            let commentContent = document.getElementById("comment-content").value.trim();
+
+            if (!commentContent) {
+                alert("Введите комментарий!");
+                return;
+            }
+
+            fetch(`/AssetComment/CreateComment`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    EntityId: assetId,
+                    TextContent: commentContent
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Ошибка при добавлении комментария");
+                }
+                return response.json();
+            })
+            .then(newComment => {
+                document.getElementById("comment-content").value = "";
+
+                let commentsContainer = document.getElementById("comments-container");
+                let commentHtml = `
+                    <div class="comment">
+                        <strong>${newComment.user_Name}</strong>
+                        <p>${newComment.comment_Text}</p>
+                        <span class="comment-date">${newComment.publication_Date}</span>
+                    </div>
+                `;
+                commentsContainer.insertAdjacentHTML("afterbegin", commentHtml);
+
+                totalComments++;
+                document.getElementById("comment-count").innerText = `(${totalComments})`;
+            })
+            .catch(error => console.error("Ошибка при добавлении комментария:", error));
+        });
+    });
+    document.getElementById("like-btn").addEventListener("click", function () {
+        var assetId = this.getAttribute("data-asset-id");
+        fetch('/Asset/ToggleLike?assetId=' + assetId, { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("like-count").innerText = data.likesCount;
+            });
+    });
+</script>
+<script>
+    function addToCart(assetId, t, p) {
+        fetch('/Cart/Add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 'assetId': assetId, 'title': t, 'price': p })
+        })
+        .then(response => {
+            if (response.ok) {
+                alert("Товар добавлен в корзину!");
+            } else {
+                alert("Ошибка при добавлении в корзину.");
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            alert("Произошла ошибка при добавлении в корзину.");
+        });
+    }
+</script>

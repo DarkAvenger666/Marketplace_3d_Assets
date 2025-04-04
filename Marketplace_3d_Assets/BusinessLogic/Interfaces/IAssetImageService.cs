@@ -5,5 +5,6 @@
         Task SaveAssetImageAsync(IFormFile file, Guid assetId);
         Task<bool> DeleteAssetImageAsync(Guid id);
         Task<string> GetAssetImagePath(Guid id);
+        Task<string> GetAssetImageRelationPath(Guid id);
     }
 }

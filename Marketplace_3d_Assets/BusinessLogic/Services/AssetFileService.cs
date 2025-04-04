@@ -70,5 +70,14 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
             }
             throw new Exception("Файла с таким id не существует");
         }
+        public async Task<string> GetAssetFileRelationPath(Guid id)
+        {
+            var assetFile = await _dbContext.AssetFiles.FirstOrDefaultAsync(f => f.Asset_File_Id == id);
+            if (assetFile != null)
+            {
+                return _fileService.GetFileRelationalPath("assetFiles", assetFile.File_Name);
+            }
+            throw new Exception("Файла с таким id не существует");
+        }
     }
 }

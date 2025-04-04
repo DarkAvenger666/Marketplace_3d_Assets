@@ -5,5 +5,6 @@
         Task<string> SaveFileAsync(IFormFile file, string folderName);
         Task<bool> DeleteFileAsync(string filePath);
         string GetFilePath(string folderName, string fileName);
+        public string GetFileRelationalPath(string folderName, string fileName);
     }
 }

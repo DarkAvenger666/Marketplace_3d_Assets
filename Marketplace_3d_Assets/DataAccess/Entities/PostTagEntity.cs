@@ -7,5 +7,7 @@ namespace Marketplace_3d_Assets.DataAccess.Entities
     {
         public Guid Post_Id { get; set; }
         public int Tag_Id { get; set; }
+        public TagEntity Tag { get; set; }
+        public PostEntity Post { get; set; }
     }
 }
