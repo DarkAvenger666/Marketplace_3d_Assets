@@ -33,13 +33,28 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
             await _dbContext.ModerationRequests.AddAsync(moderationRequest);
             await _dbContext.SaveChangesAsync();
         }
-        public async Task SendSeccessModerResult(Guid moderRequestId, Guid moderUserId)
+        public async Task SendModerResult(Guid moderRequestId, Guid moderUserId, string comment, bool result)
         {
+            var request = await _dbContext.ModerationRequests.FirstOrDefaultAsync(mr => mr.Request_Id == moderRequestId);
+            if (request == null) throw new Exception("Нет запроса с таким Id");
+            request.Completion_Date = DateTime.Now;
+            request.Is_Complited = result;
+            request.Comment = comment;
 
-        }
-        public async Task SendUnseccessModerResult(Guid moderRequestId, Guid moderUserId)
-        {
-
+            var asset = await _dbContext.Assets.FirstOrDefaultAsync(a => a.Asset_Id == request.Asset_Id);
+            if (asset == null) throw new Exception("Привязан неправильный ассет");
+            if (result)
+            {   
+                asset.Upload_Date = DateTime.Now;
+                asset.Status_Id = 3;
+            }
+            else
+            {
+                asset.Status_Id = 1;
+            }
+            _dbContext.ModerationRequests.Update(request);
+            _dbContext.Assets.Update(asset);
+            await _dbContext.SaveChangesAsync();
         }
 
     }

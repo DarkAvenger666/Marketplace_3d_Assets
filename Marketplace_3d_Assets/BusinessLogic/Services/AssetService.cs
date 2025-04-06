@@ -3,6 +3,7 @@ using Marketplace_3d_Assets.Data;
 using Marketplace_3d_Assets.DataAccess.Entities;
 using Marketplace_3d_Assets.DataAccess.Interfaces;
 using Marketplace_3d_Assets.PresentationLayer.ViewModels;
+using Marketplace_3d_Assets.PresentationLayer.ViewModels.Filters;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
@@ -35,8 +36,8 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
         {
             var profileId = Guid.Parse(_httpContextAccessor.HttpContext?.User.FindFirstValue("ProfileId"));
 
-            var existingAsset = await _repository.GetByIdAsync(
-                a.Title == dtoModel.Title && a.Profile_Id == profileId);
+            /*var existingAsset = await _repository.GetByIdAsync(
+                a.Title == dtoModel.Title && a.Profile_Id == profileId);*/
 
             Guid assetId = Guid.NewGuid();
 
@@ -90,7 +91,7 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
             }
         }
 
-        public async Task<List<AssetCardViewModel>> GetAssetsForMainPageAsync()
+        /*public async Task<List<AssetCardViewModel>> GetAssetsForMainPageAsync()
         {
             var assetsWithImageId = (await _repository.GetAssetsForMainPageAsync()).ToList();
             var assetsWithImagePath = new List<AssetCardViewModel>();
@@ -112,7 +113,65 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
                 assetsWithImagePath.Add(assetWithImgPath);
             }
             return assetsWithImagePath;
+        }*/
+
+        public async Task<(List<AssetCardViewModel> Assets, int TotalCount)> GetAssetsForMainPageAsync(AssetFilterModel filter)
+        {
+            var query = _dbContext.Assets
+                .Include(a => a.Profile)
+                .Include(a => a.Asset_Images)
+                .Include(a => a.Asset_Tags)
+                .AsQueryable();
+
+            if (filter.TypeId.HasValue)
+                query = query.Where(a => a.Type_Id == filter.TypeId);
+
+            if (filter.MinPrice.HasValue)
+                query = query.Where(a => a.Price >= filter.MinPrice);
+
+            if (filter.MaxPrice.HasValue)
+                query = query.Where(a => a.Price <= filter.MaxPrice);
+
+            if (!string.IsNullOrWhiteSpace(filter.SearchQuery))
+            {
+                var search = filter.SearchQuery.ToLower();
+                query = query.Where(a => a.Title.ToLower().Contains(search) || a.Asset_Description.ToLower().Contains(search));
+            }
+
+            query = filter.SortBy switch
+            {
+                "price" => filter.SortDescending ? query.OrderByDescending(a => a.Price) : query.OrderBy(a => a.Price),
+                "likes" => filter.SortDescending ? query.OrderByDescending(a => a.Asset_Likes.Count) : query.OrderBy(a => a.Asset_Likes.Count),
+                "comments" => filter.SortDescending ? query.OrderByDescending(a => a.Asset_Comments.Count()) : query.OrderBy(a => a.Asset_Comments.Count()),
+                _ => query.OrderByDescending(a => a.Upload_Date)
+            };
+
+            var totalCount = await query.CountAsync();
+
+            var items = await query
+                .Skip((filter.Page - 1) * filter.PageSize)
+                .Take(filter.PageSize)
+                .Select(a => new AssetCardViewModel
+                {
+                    Id = a.Asset_Id,
+                    Title = a.Title,
+                    Author_Name = a.Profile.User_Name,
+                    Asset_Image = a.Asset_Images.Select(i => i.Asset_Image_Id).FirstOrDefault().ToString(),
+                    Count_Of_Copies_Sold = a.Count_Of_Copies_Sold,
+                    Count_Of_Comments = a.Asset_Comments.Count(),
+                    Count_Of_Views = a.Count_Of_Views,
+                    Count_Of_Likes = a.Asset_Likes.Count(),
+                    Price = a.Price
+                }).ToListAsync();
+
+            for (int i = 0; i < items.Count; i++)
+            {
+                items[i].Asset_Image = await _assetImageService.GetAssetImageRelationPath(Guid.Parse(items[i].Asset_Image));
+            }
+
+            return (items, totalCount);
         }
+
         public async Task<AssetDetailsViewModel> GetAssetDetailsAsync(Guid assetId)
         {
             var assetWithImagesId = (await _repository.GetAssetDetailsAsync(assetId));
@@ -132,7 +191,7 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
                 Price = assetWithImagesId.Price,
                 Count_Of_Comments = assetWithImagesId.Count_Of_Comments,
                 Count_Of_Views = assetWithImagesId.Count_Of_Views,
-                Count_Of_Likes = await GetLikesCountAsync(assetWithImagesId.Id)
+                Count_Of_Likes = GetLikesCount(assetWithImagesId.Id)
             };
             for (int i = 0; i < assetWithImagesId.Images.Count(); i++)
             {
@@ -161,9 +220,9 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
             return like == null; // Вернёт true, если поставили лайк, false если убрали
         }
 
-        public async Task<int> GetLikesCountAsync(Guid assetId)
+        public int GetLikesCount(Guid assetId)
         {
-            return await _dbContext.AssetLikes.CountAsync(l => l.Asset_Id == assetId);
+            return _dbContext.AssetLikes.Count(l => l.Asset_Id == assetId);
         }
 
         public async Task<bool> DeleteAsync(Guid id) => await _repository.DeleteAsync(id);

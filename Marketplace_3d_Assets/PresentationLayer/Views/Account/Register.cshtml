@@ -1,46 +1,49 @@
 ﻿@using Marketplace_3d_Assets.PresentationLayer.ViewModels
 @model RegisterViewModel
-<form asp-action="Register" method="post">
-    <p>
-        <label asp-for="Name"></label>
-        <input type="text" asp-for="Name" />
-    </p>
-    <p>
-        <label asp-for="User_Name"></label>
-        <input type="text" asp-for="User_Name" />
-    </p>
-    <p>
-        <label asp-for="Email"></label>
-        <input type="email" asp-for="Email" />
-    </p>
-    <p>
-        <label asp-for="Password"></label>
-        <input type="password" asp-for="Password" />
-    </p>
-    <p>
-        <label asp-for="PhoneNumber"></label>
-        <input type="tel" asp-for="PhoneNumber" />
-    </p>
-    <p>
-        <label asp-for="Gender"></label>
-        <select asp-for="Gender">
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Hidden">Hidden</option>
-        </select>
-    </p>
-    <p>
-        <label asp-for="Specialization"></label>
-        <input type="text" asp-for="Specialization" />
-    </p>
-    <p>
-        <label asp-for="City"></label>
-        <input type="text" asp-for="City" />
-    </p>
-    <p>
-        <label asp-for="About"></label>
-        <textarea asp-for="About"></textarea>
-    </p>
+<div class="auth-form-container">
+    <h2>Регистрация</h2>
+    <form asp-action="Register" method="post">
+        <p>
+            <label asp-for="Name"></label>
+            <input type="text" asp-for="Name" />
+        </p>
+        <p>
+            <label asp-for="User_Name"></label>
+            <input type="text" asp-for="User_Name" />
+        </p>
+        <p>
+            <label asp-for="Email"></label>
+            <input type="email" asp-for="Email" />
+        </p>
+        <p>
+            <label asp-for="Password"></label>
+            <input type="password" asp-for="Password" />
+        </p>
+        <p>
+            <label asp-for="PhoneNumber"></label>
+            <input type="tel" asp-for="PhoneNumber" />
+        </p>
+        <p>
+            <label asp-for="Gender"></label>
+            <select asp-for="Gender">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Hidden">Hidden</option>
+            </select>
+        </p>
+        <p>
+            <label asp-for="Specialization"></label>
+            <input type="text" asp-for="Specialization" />
+        </p>
+        <p>
+            <label asp-for="City"></label>
+            <input type="text" asp-for="City" />
+        </p>
+        <p>
+            <label asp-for="About"></label>
+            <textarea asp-for="About"></textarea>
+        </p>
 
-    <input type="submit" value="Зарегестрироваться" />
-</form>
+        <input type="submit" value="Зарегестрироваться" />
+    </form>
+</div>

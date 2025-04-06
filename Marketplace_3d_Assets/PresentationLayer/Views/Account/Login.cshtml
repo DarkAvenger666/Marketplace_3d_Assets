@@ -1,13 +1,16 @@
 ﻿@using Marketplace_3d_Assets.PresentationLayer.ViewModels
 @model LoginViewModel
-<form asp-action="Login" method="post">
-    <p>
-        <label asp-for="Login"></label>
-        <input type="text" asp-for="Login" />
-    </p>
-    <p>
-        <label asp-for="Password"></label>
-        <input type="password" asp-for="Password" />
-    </p>
-    <input type="submit" value="Войти" />
-</form>
+<div class="auth-form-container">
+    <h2>Вход</h2>
+    <form asp-action="Login" method="post">
+        <p>
+            <label asp-for="Login"></label>
+            <input type="text" asp-for="Login" />
+        </p>
+        <p>
+            <label asp-for="Password"></label>
+            <input type="password" asp-for="Password" />
+        </p>
+        <input type="submit" value="Войти" />
+    </form>
+</div>

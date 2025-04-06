@@ -1,6 +1,12 @@
 ﻿@model Marketplace_3d_Assets.PresentationLayer.ViewModels.AssetUploadViewModel
-<h2>Загрузка Ассета</h2>
+
+<div class="upload-form-container">
+    <h2>Загрузка Ассета</h2>
     <form asp-action="SaveToDraft" method="post" enctype="multipart/form-data">
+        <p>
+            <label asp-for="AssetId"></label>
+            <input type="hidden" asp-for="AssetId" />
+        </p>
         <p>
             <label asp-for="Title"></label>
             <input type="text" asp-for="Title" />
@@ -34,9 +40,12 @@
         </p>
         <button type="button" onclick="addTag()">Добавить тег</button>
 
-        <input type="submit" value="Сохранить в черновике" />
-        <input type="submit" value="Отправить на модерацию" />
+        <div>
+            <input type="submit" value="Сохранить в черновике" />
+            <input type="submit" value="Отправить на модерацию" />
+        </div>
     </form>
+</div>
     <script>
         function addTag() {
             const container = document.getElementById('tags-container');

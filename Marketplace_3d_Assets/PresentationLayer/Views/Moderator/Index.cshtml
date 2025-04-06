@@ -1,0 +1,37 @@
+﻿@using Marketplace_3d_Assets.PresentationLayer.ViewModels
+@model List<UserListViewModel>
+
+<h2>Управление модераторами</h2>
+
+<table class="moderator-table">
+    <thead>
+        <tr>
+            <th>Имя</th>
+            <th>Логин</th>
+            <th>Email</th>
+            <th>Специализация</th>
+            <th>Роль</th>
+            <th>Действие</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Name</td>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>@user.Specialization</td>
+                <td>@user.Role</td>
+                <td>
+                    <form asp-action="ToggleRole" method="post">
+                        <input type="hidden" name="userId" value="@user.UserId" />
+                        <button type="submit">
+                            @(user.Role == "Moderator" ? "Снять модератора" : "Назначить модератором")
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

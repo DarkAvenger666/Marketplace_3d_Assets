@@ -1,11 +1,42 @@
-﻿@using Marketplace_3d_Assets.PresentationLayer.ViewModels
+﻿@using Marketplace_3d_Assets.DataAccess.Entities
+@using Marketplace_3d_Assets.PresentationLayer.ViewModels
 @model List<AssetCardViewModel>
 
-<div class="search-container">
-    <input type="text" placeholder="Search assets..." class="search-box" />
-</div>
+
 <link rel="stylesheet" href="~/css/Index.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<form method="get" asp-controller="Home" asp-action="Index" class="filter-form">
+    <div class="search-container">
+        <input type="text" name="SearchQuery" placeholder="Поиск..." class="search-box" value="@Context.Request.Query["SearchQuery"]" />
+    </div>
+    <div class="filter-row">
+        <select name="TypeId">
+            <option value="">Все типы</option>
+            @foreach (var type in ViewBag.Types as List<AssetTypeEntity>)
+            {
+                <option value="@type.Type_Id" selected="@(Context.Request.Query["TypeId"] == type.Type_Id.ToString())">@type.Name</option>
+            }
+        </select>
+
+        <input type="number" name="MinPrice" placeholder="Мин. цена" value="@Context.Request.Query["MinPrice"]" />
+        <input type="number" name="MaxPrice" placeholder="Макс. цена" value="@Context.Request.Query["MaxPrice"]" />
+
+        <select name="SortBy">
+            <option value="">Сортировка</option>
+            <option selected="@(Context.Request.Query["SortBy"] == "price")" value="price" >Цена</option>
+            <option selected="@(Context.Request.Query["SortBy"] == "likes")" value="likes">Лайки</option>
+            <option selected="@(Context.Request.Query["SortBy"] == "comments")" value="comments">Комментарии</option>
+        </select>
+
+        <select name="SortDescending">
+            <option selected="@(Context.Request.Query["SortDescending"] == "false")" value="false">По возрастанию</option>
+            <option selected="@(Context.Request.Query["SortDescending"] == "true")" value="true">По убыванию</option>
+        </select>
+
+        <button type="submit">Применить</button>
+    </div>
+</form>
+
 <div class="assets-grid">
     @foreach (var asset in Model)
     {
@@ -39,6 +70,26 @@
                 </div> *@
             </div>
         </a>
+    }
+</div>
+<div class="pagination">
+    @{
+        int totalPages = ViewBag.TotalPages;
+        int currentPage = ViewBag.CurrentPage;
+
+        for (int i = 1; i <= totalPages; i++)
+        {
+            <a href="@Url.Action("Index", new {
+                    Page = i,
+                    SearchQuery = Context.Request.Query["SearchQuery"],
+                    TypeId = Context.Request.Query["TypeId"],
+                    SortBy = Context.Request.Query["SortBy"],
+                    SortDescending = Context.Request.Query["SortDescending"],
+                    MinPrice = Context.Request.Query["MinPrice"],
+                    MaxPrice = Context.Request.Query["MaxPrice"]
+                })"
+               class="@(i == currentPage ? "active" : "")">@i</a>
+        }
     }
 </div>
 <script>

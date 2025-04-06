@@ -1,6 +1,19 @@
 ﻿@using Marketplace_3d_Assets.PresentationLayer.ViewModels
 @model IEnumerable<PostCardViewModel>
 
+<form method="get" class="post-filter-form">
+    <input type="text" name="SearchQuery" value="@ViewBag.Filter.SearchQuery" placeholder="Поиск постов..." />
+
+    <!-- Фильтр по дате -->
+    <label for="StartDate">Дата начала:</label>
+    <input type="date" name="StartDate" value="@ViewBag.Filter.StartDate?.ToString("yyyy-MM-dd")" />
+
+    <label for="EndDate">Дата конца:</label>
+    <input type="date" name="EndDate" value="@ViewBag.Filter.EndDate?.ToString("yyyy-MM-dd")" />
+
+    <input type="submit" value="Фильтровать" />
+</form>
+
 <div class="posts-container">
     @foreach (var post in Model)
     {
@@ -9,6 +22,59 @@
             <p class="post-meta">Автор: @post.Author_Name | Просмотров: @post.Count_Of_Views</p>
             <p class="post-content">@post.Post_Text.Substring(0, Math.Min(200, post.Post_Text.Length))...</p>
             <a href="@Url.Action("PostDetails", "Post", new { id = post.Id })" class="read-more">Читать далее</a>
+            <p class="post-publish-date">@post.Publication_Date</p>
         </div>
     }
 </div>
+
+<div id="loading" style="display:none; text-align:center; margin: 20px;">
+    <i class="fa fa-spinner" aria-hidden="true">Загрузка...</i>
+</div>
+
+<script>
+    let isLoading = false;
+    let currentPage = 1; // Начинаем с первой страницы
+
+    window.addEventListener('scroll', function() {
+        const scrollHeight = document.documentElement.scrollHeight;
+        const scrollPosition = window.innerHeight + window.scrollY;
+
+        // Если мы находимся внизу страницы
+        if (scrollPosition >= scrollHeight - 200 && !isLoading) {
+            isLoading = true; // Блокируем дополнительные запросы до завершения текущего
+            currentPage++; // Увеличиваем номер страницы
+
+            // Показываем индикатор загрузки
+            document.getElementById('loading').style.display = 'block';
+
+            // Запрос на сервер для загрузки следующих постов
+            fetch(`/Post/LoadMorePosts?page=${currentPage}&searchQuery=${"@ViewBag.Filter.SearchQuery"}&startDate=${"@ViewBag.Filter.StartDate"}&endDate=${"@ViewBag.Filter.EndDate"}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        const postsContainer = document.querySelector('.post-list');
+
+                        // Добавляем новые посты в DOM
+                        data.forEach(post => {
+                            const postElement = document.createElement('div');
+                            postElement.classList.add('post-card');
+                            postElement.innerHTML = `
+                                <h3>${post.title}</h3>
+                                <p>${post.content.substring(0, 150)}...</p>
+                                <p><strong>${post.authorName}</strong> — ${new Date(post.uploadDate).toLocaleDateString()}</p>
+                            `;
+                            postsContainer.appendChild(postElement);
+                        });
+                    }
+                    // Скрываем индикатор загрузки
+                    document.getElementById('loading').style.display = 'none';
+                    isLoading = false;
+                })
+                .catch(error => {
+                    console.error('Error loading posts:', error);
+                    document.getElementById('loading').style.display = 'none';
+                    isLoading = false;
+                });
+        }
+    });
+</script>

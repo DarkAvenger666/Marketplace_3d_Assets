@@ -26,13 +26,21 @@ namespace Marketplace_3d_Assets.PresentationLayer.Controllers
             return View();
         }
 
+        /*[Authorize]
+        [HttpGet]
+        public IActionResult EditAssetDarft(Guid assetId)
+        {
+            var asset = _assetService.GetAssetFroEdit(assetId);
+            return View("UploadAsset", );
+        }*/
+
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> SaveToDraft([FromForm] AssetUploadViewModel model)
         {
             var savedDraftId = await _assetService.SaveAssetToDarft(model);
             //return CreatedAtAction(nameof(GetById), new { id = savedModelId }, createdModel);
-            return Ok($"Ассет с id - {savedDraftId} успешно сохранён");
+            return Ok($"Ассет с id - {savedDraftId} успешно сохранён в черновике");
         }
 
         [HttpGet]
@@ -47,7 +55,7 @@ namespace Marketplace_3d_Assets.PresentationLayer.Controllers
         {
             var userProfileId = Guid.Parse(User.FindFirst("ProfileId")?.Value);
             var isLiked = await _assetService.ToggleLikeAsync(assetId, userProfileId);
-            var likesCount = await _assetService.GetLikesCountAsync(assetId);
+            var likesCount = _assetService.GetLikesCount(assetId);
 
             return Json(new { isLiked, likesCount });
         }

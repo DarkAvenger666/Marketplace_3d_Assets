@@ -47,6 +47,7 @@ namespace Marketplace_3d_Assets
             builder.Services.AddScoped<IPostTagService, PostTagService>();
             builder.Services.AddScoped<ICartService, CookieCartService>();
             builder.Services.AddScoped<ICheckoutService, CheckoutServiceStub>();
+            builder.Services.AddScoped<IModeratorService, ModeratorService>();
 
             /*builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();*/
@@ -104,6 +105,11 @@ namespace Marketplace_3d_Assets
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            app.MapControllerRoute(
+                name: "ManageModerators",
+                pattern: "ManageModerators/{action=Index}",
+                defaults: new { controller = "Moderator"});
             //app.MapRazorPages();
 
             app.Run();

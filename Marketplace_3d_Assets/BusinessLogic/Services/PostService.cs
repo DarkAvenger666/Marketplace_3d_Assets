@@ -2,6 +2,7 @@
 using Marketplace_3d_Assets.Data;
 using Marketplace_3d_Assets.DataAccess.Entities;
 using Marketplace_3d_Assets.PresentationLayer.ViewModels;
+using Marketplace_3d_Assets.PresentationLayer.ViewModels.Filters;
 using Microsoft.EntityFrameworkCore;
 using NuGet.ContentModel;
 
@@ -55,11 +56,57 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
                 Id = p.Post_Id,
                 Title = p.Title,
                 Post_Text = p.Post_Text,
+                Publication_Date = p.Publication_Date,
                 Author_Name = p.Profile.User_Name,
                 Count_Of_Views = p.Count_Of_Views,
             })
             .ToListAsync();
         }
+
+        public async Task<(List<PostCardViewModel> Posts, int TotalCount)> GetFilteredPostsAsync(PostFilterViewModel filter)
+        {
+            var query = _dbContext.Posts
+                .Include(p => p.Profile)
+                .AsQueryable();
+
+            // Поиск по запросу
+            if (!string.IsNullOrWhiteSpace(filter.SearchQuery))
+            {
+                query = query.Where(p =>
+                    p.Title.Contains(filter.SearchQuery) ||
+                    p.Post_Text.Contains(filter.SearchQuery));
+            }
+
+            // Фильтрация по дате
+            if (filter.StartDate.HasValue)
+            {
+                query = query.Where(p => p.Publication_Date >= filter.StartDate.Value);
+            }
+
+            if (filter.EndDate.HasValue)
+            {
+                query = query.Where(p => p.Publication_Date <= filter.EndDate.Value);
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var posts = await query
+                .Skip((filter.Page - 1) * filter.PageSize)
+                .Take(filter.PageSize)
+                .Select(p => new PostCardViewModel
+                {
+                    Id = p.Post_Id,
+                    Title = p.Title,
+                    Post_Text = p.Post_Text,
+                    Author_Name = p.Profile.User_Name,
+                    Publication_Date = p.Publication_Date,
+                    Count_Of_Views = p.Count_Of_Views
+                })
+                .ToListAsync();
+
+            return (posts, totalCount);
+        }
+
         public async Task<PostDetailsViewModel> GetPostDetailsAsync(Guid postId)
         {
             var post = await _dbContext.Posts.Include(p => p.Profile)

@@ -6,6 +6,7 @@
         public string Title { get; set; }
         public string Post_Text { get; set; }
         public string Author_Name { get; set; }
+        public DateTime Publication_Date { get; set; }
         public int Count_Of_Views { get; set; }
     }
 }

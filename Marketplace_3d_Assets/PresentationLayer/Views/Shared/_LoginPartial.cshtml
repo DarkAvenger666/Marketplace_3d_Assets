@@ -1,26 +1,58 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@* @inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager *@
+@using System.Security.Claims
+@inject IHttpContextAccessor HttpContextAccessor
 
-@* <ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
-    <li class="nav-item">
-        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
-    </li>
-    <li class="nav-item">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-        </form>
-    </li>
+@{
+    var user = HttpContextAccessor.HttpContext?.User;
+    var isAuthenticated = user?.Identity?.IsAuthenticated ?? false;
+    var isModerator = user?.IsInRole("Moderator") ?? false;
+    var isAdministrator = user?.IsInRole("Administrator") ?? false;
+    var userName = user?.Identity?.Name;
 }
-else *@
-{
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
-}
+
+ <ul class="navbar-nav">
+    @if (isAuthenticated)
+    {
+        @if (isAdministrator)
+        {
+            <a class="nav-item" href="/ManageModerators">
+                <i class="fas fa-tools"></i>
+                <span>Упарвление модераторами</span>
+            </a>
+        }
+        @if (isModerator || isAdministrator)
+        {
+            <a class="nav-item" href="/Moderation">
+                <i class="fas fa-tools"></i>
+                <span>Модерировать</span>
+            </a>
+        }
+        <a class="nav-item" href="/Post/PublishPost">
+            <i class="fa fa-upload"></i>
+            <span>Написать пост</span>
+        </a>
+        <a class="nav-item" href="/Asset/UploadAsset">
+            <i class="fa fa-upload"></i>
+            <span>Загрузить новый ассет</span>
+        </a>
+        <a class="nav-item" href="/Profile">
+            <i class="fas fa-user"></i>
+            <span>@userName</span>
+        </a>
+        <a class="nav-item" href="/Account/Logout">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Выйти</span>
+        </a>
+    }
+    else
+    {
+        <a class="nav-item" href="/Account/Login">
+            <i class="fas fa-sign-in-alt"></i>
+            <span>Войти</span>
+        </a>
+        <a class="nav-item" href="/Account/Register">
+            <i class="fas fa-user-plus"></i>
+            <span>Регистрация</span>
+        </a>
+    }
 </ul>

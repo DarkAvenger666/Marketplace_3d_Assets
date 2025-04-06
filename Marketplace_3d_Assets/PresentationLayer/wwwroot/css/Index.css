@@ -1,8 +1,8 @@
 ﻿body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
-    margin: 0;
-    padding: 20px;
+    /*margin: 0;*/
+    /*padding: 20px;*/
 }
 
 
@@ -30,6 +30,38 @@ a {
     .search-box:focus {
         border-color: #007bff;
         box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+    }
+
+/* Контейнер для фильтров */
+.filter-form {
+    display: flex;
+    flex-direction: column;
+    background-color: #f9f9f9;
+    padding: 16px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    gap: 10px;
+}
+
+.filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+}
+
+.filter-button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+    .filter-button:hover {
+        background-color: #0056b3;
     }
 
 /* Сетка ассетов */
@@ -77,22 +109,6 @@ a {
         margin: 4px 12px;
     }
 
-/* Блок тегов */
-/*.tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    padding: 10px 12px;
-}
-
-.tag {
-    background-color: #007bff;
-    color: white;
-    font-size: 12px;
-    padding: 4px 8px;
-    border-radius: 4px;
-}*/
-
 /* Контейнер статистики */
 .asset-stats {
     display: flex;
@@ -115,4 +131,36 @@ a {
     .stat-item i {
         font-size: 16px;
         color: #007bff;
+    }
+
+
+/* Контейнер пагинации */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+    /* Стиль для кнопок страниц */
+    .pagination a {
+        padding: 8px 14px;
+        background-color: #ffffff;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        color: #333;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+        .pagination a:hover {
+            background-color: #f0f0f0;
+        }
+
+    /* Текущая страница */
+    .pagination .active-page {
+        background-color: #007bff;
+        color: white;
+        border-color: #007bff;
     }

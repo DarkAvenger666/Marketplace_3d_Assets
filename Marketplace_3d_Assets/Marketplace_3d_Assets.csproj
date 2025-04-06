@@ -9,8 +9,6 @@
 
   <ItemGroup>
     <Content Include="PresentationLayer\wwwroot\css\site.css" />
-    <Content Include="PresentationLayer\wwwroot\favicon.ico" />
-    <Content Include="PresentationLayer\wwwroot\js\site.js" />
     <Content Include="PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css" />
     <Content Include="PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map" />
     <Content Include="PresentationLayer\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css" />
@@ -85,6 +83,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="PresentationLayer\Views\Moderation\" />
     <Folder Include="PresentationLayer\wwwroot\assetFiles\.blend\" />
     <Folder Include="PresentationLayer\wwwroot\assetFiles\.obj\" />
     <Folder Include="PresentationLayer\wwwroot\assetFiles\.fbx\" />
@@ -92,6 +91,7 @@
     <Folder Include="PresentationLayer\wwwroot\images\assetImges\" />
     <Folder Include="PresentationLayer\wwwroot\images\postImages\" />
     <Folder Include="PresentationLayer\wwwroot\images\profileImages\" />
+    <Folder Include="PresentationLayer\wwwroot\js\" />
   </ItemGroup>
 
 </Project>
