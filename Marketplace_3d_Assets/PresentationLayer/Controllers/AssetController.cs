@@ -43,11 +43,25 @@ namespace Marketplace_3d_Assets.PresentationLayer.Controllers
             return Ok($"Ассет с id - {savedDraftId} успешно сохранён в черновике");
         }
 
+        public async Task<IActionResult> SendToModeration(Guid assetId)
+        {
+            await _assetService.SendAssetToModeration(assetId);
+            return Ok($"Ассет с id - {assetId} успешно отправлен на модерацию");
+        }
+
         [HttpGet]
         public async Task<IActionResult> AssetDetails([FromRoute(Name = "id")] Guid assetId)
         {
             var assetDetails = await _assetService.GetAssetDetailsAsync(assetId);
             return View(assetDetails);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SetOrRemoveForSale(Guid assetId, bool forSale)
+        {
+            var result = await _assetService.SetForSaleAsync(assetId, forSale);
+            if (result) return Ok();
+            return BadRequest();
         }
 
         [HttpPost]

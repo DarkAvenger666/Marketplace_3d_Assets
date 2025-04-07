@@ -1,0 +1,18 @@
+﻿@using Marketplace_3d_Assets.PresentationLayer.ViewModels
+@model PostStatsViewModel
+
+@{
+    ViewData["Title"] = "Статистика постов";
+}
+
+<h2>Статистика постов за последний месяц</h2>
+
+<table class="stats-table">
+    <tr>
+        <th>Всего постов</th>
+    </tr>
+    <tr>
+        <td>@Model.TotalPosts</td>
+    </tr>
+</table>
+

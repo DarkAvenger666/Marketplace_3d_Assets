@@ -1,0 +1,29 @@
+﻿@using Marketplace_3d_Assets.PresentationLayer.ViewModels
+@model List<ModerationRequestViewModel>
+
+<h2>Запросы на модерацию</h2>
+<table class="table moderation-table">
+    <thead>
+        <tr>
+            <th>Дата запроса</th>
+            <th>Название ассета</th>
+            <th>Тип</th>
+            <th>Автор</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.SendingDateTime.ToShortDateString()</td>
+                <td>@item.AssetTitle</td>
+                <td>@item.AssetType</td>
+                <td>@item.AuthorUserName</td>
+                <td>
+                    <a class="btn btn-primary" href="@Url.Action("Review", "Moderation", new { id = item.RequestId })">Рассмотреть</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

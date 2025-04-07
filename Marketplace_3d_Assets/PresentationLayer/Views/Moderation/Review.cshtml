@@ -1,0 +1,36 @@
+﻿@using Marketplace_3d_Assets.PresentationLayer.ViewModels
+@model ModerationDetailsViewModel
+
+<h2>Рассмотрение ассета</h2>
+<div class="moderation-details-container">
+    <h1>@Model.Title</h1>
+
+    <div class="asset-images">
+        @foreach (var image in Model.Images)
+        {
+            <img src="~/@image" alt="Asset Image" class="asset-image" />
+        }
+    </div>
+
+    <div class="asset-info">
+        <p><strong>Автор:</strong> @Model.Author_Name</p>
+        <p><strong>Тип:</strong> @Model.Type_Name</p>
+        <p><strong>Цена:</strong> $@Model.Price</p>
+        <p><strong>Описание:</strong> @Model.Description</p>
+    </div>
+
+    <div class="asset-tags">
+        <strong>Теги:</strong>
+        @foreach (var tag in Model.Tags)
+        {
+            <span class="tag">@tag</span>
+        }
+    </div>
+</div>
+
+<form asp-action="SubmitModerationDecision" method="post">
+    <input type="hidden" name="requestId" value="@Model.RequestId" />
+    <textarea name="comment" placeholder="Комментарий модерации"></textarea><br />
+    <button type="submit" name="action" value="return" class="btn btn-warning">Отправить на доработку</button>
+    <button type="submit" name="action" value="publish" class="btn btn-success">Опубликовать</button>
+</form>

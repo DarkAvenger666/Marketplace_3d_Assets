@@ -1,5 +1,5 @@
 ﻿@using Marketplace_3d_Assets.PresentationLayer.ViewModels
-@model IEnumerable<PostCardViewModel>
+@* @model IEnumerable<PostCardViewModel> *@
 
 <form method="get" class="post-filter-form">
     <input type="text" name="SearchQuery" value="@ViewBag.Filter.SearchQuery" placeholder="Поиск постов..." />
@@ -27,11 +27,23 @@
     }
 </div>
 
-<div id="loading" style="display:none; text-align:center; margin: 20px;">
-    <i class="fa fa-spinner" aria-hidden="true">Загрузка...</i>
+<div class="pagination">
+    @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
+    {
+        <a href="@Url.Action("Index", new {
+            Page = i,
+            SearchQuery = ViewBag.Filter.SearchQuery,
+            StartDate = ViewBag.Filter.StartDate,
+            EndDate = ViewBag.Filter.EndDate
+        })" class="@(ViewBag.Filter.Page == i ? "active" : "")">@i</a>
+    }
 </div>
 
-<script>
+@* <div id="loading" style="display:none; text-align:center; margin: 20px;">
+    <i class="fa fa-spinner" aria-hidden="true">Загрузка...</i>
+</div> *@
+
+@* <script>
     let isLoading = false;
     let currentPage = 1; // Начинаем с первой страницы
 
@@ -77,4 +89,4 @@
                 });
         }
     });
-</script>
+</script> *@

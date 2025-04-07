@@ -28,6 +28,7 @@ namespace Marketplace_3d_Assets.Data
         public DbSet<UserRoleEntity> UserRoles { get; set; } = null!;
         public DbSet<CartItemEntity> CartItems { get; set; } = null!;
         public DbSet<AssetLikeEntity> AssetLikes { get; set; } = null!;
+        public DbSet<ModerationRequestStatusEntity> ModerationRequestStatuses { get; set; } = null!;
         public ApplicationContext(DbContextOptions<ApplicationContext> options) 
             : base(options)
         {
@@ -154,6 +155,18 @@ namespace Marketplace_3d_Assets.Data
                 .HasOne(l => l.Profile)
                 .WithMany(p => p.Asset_Likes)
                 .HasForeignKey(l => l.Profile_Id)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ModerationRequestStatusEntity>()
+                .HasMany(s => s.moderationRequests)
+                .WithOne(mr => mr.Status)
+                .HasForeignKey(mr => mr.Status_Id)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ModerationRequestEntity>()
+                .HasOne(mr => mr.Asset)
+                .WithMany(a => a.ModerationRequests)
+                .HasForeignKey(mr => mr.Asset_Id)
                 .OnDelete(DeleteBehavior.Cascade);
         }
         /* protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

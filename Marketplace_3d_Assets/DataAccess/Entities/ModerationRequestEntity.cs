@@ -11,8 +11,10 @@ namespace Marketplace_3d_Assets.DataAccess.Entities
         public DateTime Sending_Date { get; set; }
         public DateTime Completion_Date { get; set; }
         public Guid Asset_Id { get; set; }
-        public bool Is_Complited { get; set; }
+        public int Status_Id { get; set; }
         public string Comment { get; set; }
         public Guid User_Id { get; set; }
+        public ModerationRequestStatusEntity Status { get; set; }
+        public AssetEntity Asset {  get; set; }
     }
 }

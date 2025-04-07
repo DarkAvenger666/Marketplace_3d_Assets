@@ -38,8 +38,17 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
 
             /*var existingAsset = await _repository.GetByIdAsync(
                 a.Title == dtoModel.Title && a.Profile_Id == profileId);*/
+            var assetExist = await _dbContext.Assets.AnyAsync(a => a.Asset_Id == dtoModel.AssetId);
 
-            Guid assetId = Guid.NewGuid();
+            Guid assetId;
+            if (!assetExist) 
+            {
+                assetId = Guid.NewGuid();
+            }
+            else
+            {
+                assetId = dtoModel.AssetId;
+            }
 
             
             var model = new AssetEntity()
@@ -54,7 +63,15 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
                 Price = dtoModel.Price,
                 Profile_Id = profileId
             };
-            await _repository.AddAsync(model);
+
+            if (!assetExist)
+            {
+                await _repository.AddAsync(model);
+            }
+            else
+            {
+                await _repository.UpdateAsync(model);
+            }
 
             foreach (var file in dtoModel.Files)
             {
@@ -200,6 +217,20 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
             };
 
             return assetWithImagesPath;
+        }
+
+        public async Task<bool> SetForSaleAsync(Guid assetId, bool forSale)
+        {
+            var asset = await _dbContext.Assets.FindAsync(assetId);
+            if (asset == null)
+                return false;
+
+            if (asset.Status_Id == 1 || asset.Status_Id == 2) return false;
+
+            asset.Status_Id = forSale ? 3 : 4; // 3 — на продаже, иначе снять (4)
+
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
 
         public async Task<bool> ToggleLikeAsync(Guid assetId, Guid userProfileId)

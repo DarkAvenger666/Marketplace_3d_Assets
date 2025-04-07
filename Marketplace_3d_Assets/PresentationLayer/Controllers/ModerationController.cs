@@ -7,6 +7,7 @@ using System.Security.Claims;
 
 namespace Marketplace_3d_Assets.PresentationLayer.Controllers
 {
+    [Authorize(Roles = "Moderator, Administrator")]
     public class ModerationController : Controller
     {
         private readonly IModerationService _moderationService;
@@ -17,20 +18,37 @@ namespace Marketplace_3d_Assets.PresentationLayer.Controllers
             _moderationService = moderationService;
             _dbContext = applicationContext;
         }
-        [Authorize(Roles = "Moderator, Administrator")]
-        public async Task<IActionResult> SendModerResult(Guid moderRequestId, string comment, bool result)
+
+        [HttpGet]
+        public async Task<IActionResult> GetMyModerRequests()
         {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.User_Id == Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)));
-            if (user == null) return NotFound();
-            await _moderationService.SendModerResult(moderRequestId, user.User_Id, comment, result);
-            return Ok();
+            var moderatorId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var requests = await _moderationService.GetModerationRequestsAsync(moderatorId);
+            return View("MyModerRequests", requests);
         }
-        /*[Authorize(Roles = "Moderator, Administrator")]
-        public async Task<IActionResult> GetModerRequests()
+
+        [HttpGet]
+        public async Task<IActionResult> Review(Guid requestId)
         {
-            var user = User.FindFirst(ClaimTypes.NameIdentifier, )
-            await _moderationService.GetModerRequests();
-            return View();
-        }*/
+            var moderatorId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var model = await _moderationService.GetModerationDetailsAsync(requestId, moderatorId);
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SubmitModerationDecision(Guid requestId, string comment, string action)
+        {
+            var moderatorId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var request = await _dbContext.ModerationRequests.FirstOrDefaultAsync(mr => mr.Request_Id == requestId);
+            if (request == null) return NotFound();
+            if (request.User_Id != moderatorId) return Unauthorized();
+
+            if (action == "ReturnedForRevision")
+                await _moderationService.SendModerResult(requestId, moderatorId, comment, false);
+            else if (action == "Published")
+                await _moderationService.SendModerResult(requestId, moderatorId, comment, true);
+
+            return RedirectToAction("MyModerationRequests");
+        }
     }
 }

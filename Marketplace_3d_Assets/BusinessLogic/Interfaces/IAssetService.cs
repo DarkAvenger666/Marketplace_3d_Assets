@@ -10,9 +10,11 @@ namespace Marketplace_3d_Assets.BusinessLogic.Interfaces
         Task<Guid> SaveAssetToDarft(AssetUploadViewModel dtoModel);
         /*Task<List<AssetCardViewModel>> GetAssetsForMainPageAsync();*/
         Task<(List<AssetCardViewModel> Assets, int TotalCount)> GetAssetsForMainPageAsync(AssetFilterModel filter);
+        Task SendAssetToModeration(Guid assetId);
         Task<AssetDetailsViewModel> GetAssetDetailsAsync(Guid assetId);
         /*Task<AssetUploadViewModel> GetAssetDetailsAsync(*/
         Task<bool> ToggleLikeAsync(Guid assetId, Guid userProfileId);
         int GetLikesCount(Guid assetId);
+        Task<bool> SetForSaleAsync(Guid assetId, bool forSale);
     }
 }

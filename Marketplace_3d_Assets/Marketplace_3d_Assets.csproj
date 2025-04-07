@@ -83,7 +83,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="PresentationLayer\Views\Moderation\" />
     <Folder Include="PresentationLayer\wwwroot\assetFiles\.blend\" />
     <Folder Include="PresentationLayer\wwwroot\assetFiles\.obj\" />
     <Folder Include="PresentationLayer\wwwroot\assetFiles\.fbx\" />

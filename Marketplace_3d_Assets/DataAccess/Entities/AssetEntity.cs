@@ -25,5 +25,6 @@ namespace Marketplace_3d_Assets.DataAccess.Entities
         public List<AssetImageEntity> Asset_Images { get; set; } = new List<AssetImageEntity>();
         public List<AssetTagEntity> Asset_Tags { get; set; } = new List<AssetTagEntity>();
         public List<AssetLikeEntity> Asset_Likes { get; set; } = new List<AssetLikeEntity>();
+        public List<ModerationRequestEntity> ModerationRequests { get; set; }
     }
 }

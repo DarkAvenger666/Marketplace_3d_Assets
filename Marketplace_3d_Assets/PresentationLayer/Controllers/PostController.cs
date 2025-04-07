@@ -17,7 +17,7 @@ namespace Marketplace_3d_Assets.PresentationLayer.Controllers
             _postService = postService;
         }
 
-        [HttpGet]
+/*        [HttpGet]
         public async Task<IActionResult> LoadMorePosts([FromBody] PostFilterViewModel filter)
         {
             var (posts, totalCount) = await _postService.GetFilteredPostsAsync(filter);
@@ -37,7 +37,7 @@ namespace Marketplace_3d_Assets.PresentationLayer.Controllers
 
             return Json(postCards);
 
-        }
+        }*/
 
         [HttpGet]
         public async Task<IActionResult> Index(PostFilterViewModel filter)
