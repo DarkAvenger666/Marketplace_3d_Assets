@@ -1,5 +1,6 @@
 ﻿@model Marketplace_3d_Assets.PresentationLayer.ViewModels.AssetUploadViewModel
 
+
 <div class="upload-form-container">
     <h2>Загрузка Ассета</h2>
     <form method="post" enctype="multipart/form-data">
@@ -47,13 +48,13 @@
                 Сохранить в черновике
             </button>
 
-            <button type="submit"
+           @* <button type="submit"
                     formaction="/Asset/SendToModeration"
                     formmethod="post"
                     name="assetId"
                     value="@Model.AssetId">
                 Отправить на модерацию
-            </button>
+            </button>  *@
         </div>
     </form>
 </div>

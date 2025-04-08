@@ -17,28 +17,6 @@ namespace Marketplace_3d_Assets.PresentationLayer.Controllers
             _postService = postService;
         }
 
-/*        [HttpGet]
-        public async Task<IActionResult> LoadMorePosts([FromBody] PostFilterViewModel filter)
-        {
-            var (posts, totalCount) = await _postService.GetFilteredPostsAsync(filter);
-
-            ViewBag.Filter = filter;
-            ViewBag.TotalPages = (int)Math.Ceiling(totalCount / (double)filter.PageSize);
-
-            var postCards = posts.Select(post => new PostCardViewModel
-            {
-                Id = post.Id,
-                Title = post.Title,
-                Post_Text = post.Post_Text,
-                Author_Name = post.Author_Name,
-                Publication_Date = post.Publication_Date,
-                Count_Of_Views = post.Count_Of_Views
-            }).ToList();
-
-            return Json(postCards);
-
-        }*/
-
         [HttpGet]
         public async Task<IActionResult> Index(PostFilterViewModel filter)
         {

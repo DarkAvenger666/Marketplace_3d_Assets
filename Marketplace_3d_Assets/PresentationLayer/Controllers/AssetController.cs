@@ -43,6 +43,7 @@ namespace Marketplace_3d_Assets.PresentationLayer.Controllers
             return Ok($"Ассет с id - {savedDraftId} успешно сохранён в черновике");
         }
 
+        [Authorize]
         public async Task<IActionResult> SendToModeration(Guid assetId)
         {
             await _assetService.SendAssetToModeration(assetId);
@@ -56,6 +57,7 @@ namespace Marketplace_3d_Assets.PresentationLayer.Controllers
             return View(assetDetails);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> SetOrRemoveForSale(Guid assetId, bool forSale)
         {
@@ -64,6 +66,7 @@ namespace Marketplace_3d_Assets.PresentationLayer.Controllers
             return BadRequest();
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> ToggleLike(Guid assetId)
         {

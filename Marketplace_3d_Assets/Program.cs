@@ -41,7 +41,7 @@ namespace Marketplace_3d_Assets
             builder.Services.AddScoped<IModerationService, ModerationService>();
             builder.Services.AddScoped<IAssetService, AssetService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
-            builder.Services.AddScoped<IUserService, UserService>();
+            /*builder.Services.AddScoped<IUserService, UserService>();*/
             builder.Services.AddScoped<IAssetCommentService, AssetCommentService>();
             builder.Services.AddScoped<IPostService, PostService>();
             builder.Services.AddScoped<IPostTagService, PostTagService>();

@@ -39,6 +39,7 @@ namespace Marketplace_3d_Assets.PresentationLayer.Controllers
             return Ok(createdComment);
         }
 
+        [Authorize]
         [HttpDelete("{commentId}")]
         public async Task<IActionResult> DeleteComment(Guid commentId)
         {
