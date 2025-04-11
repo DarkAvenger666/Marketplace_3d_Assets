@@ -1,10 +1,11 @@
-﻿using Marketplace_3d_Assets.Data;
+﻿using Marketplace_3d_Assets.BusinessLogic.Interfaces;
+using Marketplace_3d_Assets.Data;
 using Marketplace_3d_Assets.PresentationLayer.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace Marketplace_3d_Assets.BusinessLogic.Services
 {
-    public class StatisticsService
+    public class StatisticsService : IStatisticsService
     {
         private readonly ApplicationContext _dbContext;
 
@@ -31,7 +32,8 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
         {
             var oneMonthAgo = DateTime.UtcNow.AddMonths(-1);
 
-            var assets = await _dbContext.Assets
+            var assets = await _dbContext.Assets.Include(a => a.Asset_Likes)
+                .Include(a => a.Asset_Comments)
                 .Where(a => a.Upload_Date >= oneMonthAgo && a.Status_Id == 3)
                 .ToListAsync();
 

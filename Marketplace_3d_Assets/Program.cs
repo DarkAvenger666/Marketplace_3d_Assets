@@ -48,6 +48,7 @@ namespace Marketplace_3d_Assets
             builder.Services.AddScoped<ICartService, CookieCartService>();
             builder.Services.AddScoped<ICheckoutService, CheckoutServiceStub>();
             builder.Services.AddScoped<IModeratorService, ModeratorService>();
+            builder.Services.AddScoped<IStatisticsService, StatisticsService>();
 
             /*builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();*/
