@@ -30,13 +30,14 @@ namespace Marketplace_3d_Assets.PresentationLayer.Controllers
         [HttpGet]
         public async Task<IActionResult> Review(Guid requestId)
         {
+            Console.WriteLine(requestId);
             var moderatorId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
             var model = await _moderationService.GetModerationDetailsAsync(requestId, moderatorId);
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> SubmitModerationDecision(Guid requestId, string comment, string action)
+        public async Task<IActionResult> SubmitModerationDecision([FromForm] Guid requestId, [FromForm] string comment, [FromForm] string action)
         {
             var moderatorId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
             var request = await _dbContext.ModerationRequests.FirstOrDefaultAsync(mr => mr.Request_Id == requestId);
@@ -48,7 +49,8 @@ namespace Marketplace_3d_Assets.PresentationLayer.Controllers
             else if (action == "Published")
                 await _moderationService.SendModerResult(requestId, moderatorId, comment, true);
 
-            return RedirectToAction("MyModerationRequests");
+            TempData["SuccessMessage"] = "Решение по модерации успешно отправлено!";
+            return RedirectToAction("GetMyModerRequests", "Moderation");
         }
     }
 }

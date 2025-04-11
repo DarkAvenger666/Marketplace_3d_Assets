@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Marketplace_3d_Assets.PresentationLayer.ViewModels;
+using System.Security.Claims;
 
 namespace Marketplace_3d_Assets.PresentationLayer.Controllers
 {
@@ -38,16 +39,30 @@ namespace Marketplace_3d_Assets.PresentationLayer.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveToDraft([FromForm] AssetUploadViewModel model)
         {
+            /*Console.WriteLine(model.AssetId);*/
             var savedDraftId = await _assetService.SaveAssetToDarft(model);
             //return CreatedAtAction(nameof(GetById), new { id = savedModelId }, createdModel);
-            return Ok($"Ассет с id - {savedDraftId} успешно сохранён в черновике");
+
+            TempData["SuccessMessage"] = $"Ассет с id - {savedDraftId} успешно сохранён в черновик!";
+            return RedirectToAction("Index", "Home");
+        }
+
+        [Authorize]
+        public async Task<IActionResult> MyDrafts()
+        {
+            var profileId = Guid.Parse(User.FindFirstValue("ProfileId"));
+            Console.WriteLine(profileId);
+            var drafts = await _assetService.GetUserDraftsAsync(profileId);
+            return View(drafts);
         }
 
         [Authorize]
         public async Task<IActionResult> SendToModeration(Guid assetId)
         {
             await _assetService.SendAssetToModeration(assetId);
-            return Ok($"Ассет с id - {assetId} успешно отправлен на модерацию");
+
+            TempData["SuccessMessage"] = $"Ассет с id - {assetId} успешно отправлен на модерацию";
+            return RedirectToAction("MyDrafts", "Asset");
         }
 
         [HttpGet]

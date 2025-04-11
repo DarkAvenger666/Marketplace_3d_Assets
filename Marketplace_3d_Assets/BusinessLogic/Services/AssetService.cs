@@ -61,7 +61,8 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
                 Count_Of_Views = 0,
                 Asset_Description = dtoModel.AssetDescription,
                 Price = dtoModel.Price,
-                Profile_Id = profileId
+                Profile_Id = profileId,
+                
             };
 
             if (!assetExist)
@@ -88,6 +89,20 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
             return assetId;
         }
 
+        public async Task<List<AssetPreviewViewModel>> GetUserDraftsAsync(Guid userId)
+        {
+            return await _dbContext.Assets
+                .Where(a => a.Profile_Id == userId && a.Status_Id == 1)
+                .Select(a => new AssetPreviewViewModel
+                {
+                    AssetId = a.Asset_Id,
+                    Title = a.Title,
+                    Price = a.Price,
+                    TypeName = a.Type.Name,
+                })
+                .ToListAsync();
+        }
+
         public async Task SendAssetToModeration(Guid assetId)
         {
             var asset = await _repository.GetByIdAsync(assetId);
@@ -108,36 +123,13 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
             }
         }
 
-        /*public async Task<List<AssetCardViewModel>> GetAssetsForMainPageAsync()
-        {
-            var assetsWithImageId = (await _repository.GetAssetsForMainPageAsync()).ToList();
-            var assetsWithImagePath = new List<AssetCardViewModel>();
-            for (int i = 0; i < assetsWithImageId.Count(); i++)
-            {
-                var assetWithImgPath = new AssetCardViewModel()
-                {
-                    Id = assetsWithImageId[i].Id,
-                    Title = assetsWithImageId[i].Title,
-                    Author_Name = assetsWithImageId[i].Author_Name,
-                    Type_Name = assetsWithImageId[i].Type_Name,
-                    Count_Of_Copies_Sold = assetsWithImageId[i].Count_Of_Copies_Sold,
-                    Asset_Image = await _assetImageService.GetAssetImageRelationPath(assetsWithImageId[i].Asset_Image_Id),
-                    Price = assetsWithImageId[i].Price,
-                    Count_Of_Comments = assetsWithImageId[i].Count_of_Comments,
-                    Count_Of_Views = assetsWithImageId[i].Count_Of_Views,
-                    Count_Of_Likes = await GetLikesCountAsync(assetsWithImageId[i].Id)
-                };
-                assetsWithImagePath.Add(assetWithImgPath);
-            }
-            return assetsWithImagePath;
-        }*/
-
         public async Task<(List<AssetCardViewModel> Assets, int TotalCount)> GetAssetsForMainPageAsync(AssetFilterModel filter)
         {
             var query = _dbContext.Assets
                 .Include(a => a.Profile)
                 .Include(a => a.Asset_Images)
                 .Include(a => a.Asset_Tags)
+                .Where(a => a.Status_Id == 3)
                 .AsQueryable();
 
             if (filter.TypeId.HasValue)

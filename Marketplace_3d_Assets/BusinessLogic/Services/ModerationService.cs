@@ -27,7 +27,7 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
         }
         public async Task SendAssetToModeration(Guid assetId)
         {
-            var asset = _dbContext.Assets.FirstOrDefaultAsync(a => a.Asset_Id == assetId);
+            var asset = await _dbContext.Assets.FirstOrDefaultAsync(a => a.Asset_Id == assetId);
             if (asset == null) throw new Exception("Нет ассета с таким id");
             var moderationRequest = new ModerationRequestEntity()
             {
@@ -35,7 +35,8 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
                 Asset_Id = assetId,
                 Status_Id = 1,
                 Sending_Date = DateTime.Now,
-                User_Id = await _moderRepository.GetUserWithMinModerationRequestsAsync()
+                User_Id = await _moderRepository.GetUserWithMinModerationRequestsAsync(),
+                Comment = "",
             };
             await _dbContext.ModerationRequests.AddAsync(moderationRequest);
             await _dbContext.SaveChangesAsync();
@@ -56,6 +57,7 @@ namespace Marketplace_3d_Assets.BusinessLogic.Services
             {
                 request.Status_Id = 2;
                 asset.Upload_Date = DateTime.Now;
+                asset.Modified_Date = DateTime.Now;
                 asset.Status_Id = 3;
             }
             else

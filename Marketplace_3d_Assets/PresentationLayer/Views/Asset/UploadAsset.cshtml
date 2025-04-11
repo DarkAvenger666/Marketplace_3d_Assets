@@ -3,10 +3,10 @@
 
 <div class="upload-form-container">
     <h2>Загрузка Ассета</h2>
-    <form method="post" enctype="multipart/form-data">
+    <form asp-action="SaveToDraft" method="post" enctype="multipart/form-data">
         <p>
             <label asp-for="AssetId"></label>
-            <input type="hidden" asp-for="AssetId" />
+            <input type="hidden" asp-for="AssetId" value="00000000-0000-0000-0000-000000000000" />
         </p>
         <p>
             <label asp-for="Title"></label>
@@ -41,12 +41,16 @@
         </p>
         <button type="button" onclick="addTag()">Добавить тег</button>
 
+        <button type="submit">
+            Сохранить в черновике
+        </button>
+
         <div>
-            <button type="submit"
+            @* <button type="submit"
                     formaction="/Asset/SaveToDraft"
                     formmethod="post">
                 Сохранить в черновике
-            </button>
+            </button> *@
 
            @* <button type="submit"
                     formaction="/Asset/SendToModeration"

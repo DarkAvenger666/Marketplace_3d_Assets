@@ -1,6 +1,12 @@
 ﻿@using Marketplace_3d_Assets.PresentationLayer.ViewModels
 @model List<ModerationRequestViewModel>
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="toast" class="toast-notification show">
+        @TempData["SuccessMessage"]
+    </div>
+}
 <h2>Запросы на модерацию</h2>
 <table class="table moderation-table">
     <thead>
@@ -21,9 +27,19 @@
                 <td>@item.AssetType</td>
                 <td>@item.AuthorUserName</td>
                 <td>
-                    <a class="btn btn-primary" href="@Url.Action("Review", "Moderation", new { id = item.RequestId })">Рассмотреть</a>
+                    <a class="btn btn-primary" href="@Url.Action("Review", "Moderation", new { requestId = item.RequestId })">Рассмотреть</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+<script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const toast = document.getElementById('toast');
+        if (toast) {
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    });
+</script>

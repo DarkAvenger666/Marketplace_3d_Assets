@@ -1,0 +1,40 @@
+﻿@model List<Marketplace_3d_Assets.PresentationLayer.ViewModels.AssetPreviewViewModel>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="toast" class="toast-notification show">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<h2>Мои черновики</h2>
+
+@if (!Model.Any())
+{
+    <p>У вас пока нет черновиков. Загрузите ассет и сохраните его!</p>
+}
+else
+{
+    <div class="drafts-container">
+        @foreach (var asset in Model)
+        {
+            <div class="draft-card">
+                @* <img src="~/@asset.TypeName" alt="Preview" class="draft-thumbnail" /> *@
+                <h3>@asset.Title</h3>
+                <p>@asset.TypeName</p>
+                <p>Цена: $@asset.Price</p>
+                <a asp-controller="Asset" asp-action="SendToModeration" asp-route-assetId="@asset.AssetId" class="btn btn-primary">Отправить на модерацию</a>
+            </div>
+        }
+    </div>
+}
+<script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const toast = document.getElementById('toast');
+        if (toast) {
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    });
+</script>

@@ -4,7 +4,12 @@
 
 
 <link rel="stylesheet" href="~/css/Index.css" />
-
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="toast" class="toast-notification show">
+        @TempData["SuccessMessage"]
+    </div>
+}
 <form method="get" asp-controller="Home" asp-action="Index" class="filter-form">
     <div class="search-container">
         <input type="text" name="SearchQuery" placeholder="Поиск..." class="search-box" value="@Context.Request.Query["SearchQuery"]" />
@@ -100,5 +105,15 @@
             .then(data => {
                 document.getElementById("like-count").innerText = data.likesCount;
             });
+    });
+</script>
+<script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const toast = document.getElementById('toast');
+        if (toast) {
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
     });
 </script>

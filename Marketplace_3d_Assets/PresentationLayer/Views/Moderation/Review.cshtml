@@ -31,6 +31,6 @@
 <form asp-action="SubmitModerationDecision" method="post">
     <input type="hidden" name="requestId" value="@Model.RequestId" />
     <textarea name="comment" placeholder="Комментарий модерации"></textarea><br />
-    <button type="submit" name="action" value="return" class="btn btn-warning">Отправить на доработку</button>
-    <button type="submit" name="action" value="publish" class="btn btn-success">Опубликовать</button>
+    <button type="submit" name="action" value="ReturnedForRevision" class="btn btn-warning">Отправить на доработку</button>
+    <button type="submit" name="action" value="Published" class="btn btn-success">Опубликовать</button>
 </form>

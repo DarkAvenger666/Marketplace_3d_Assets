@@ -16,5 +16,6 @@ namespace Marketplace_3d_Assets.BusinessLogic.Interfaces
         Task<bool> ToggleLikeAsync(Guid assetId, Guid userProfileId);
         int GetLikesCount(Guid assetId);
         Task<bool> SetForSaleAsync(Guid assetId, bool forSale);
+        Task<List<AssetPreviewViewModel>> GetUserDraftsAsync(Guid userId);
     }
 }
